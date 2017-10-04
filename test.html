@@ -1,0 +1,40 @@
+<html>
+<head>
+		<meta  charset="utf-8">
+<script type="text/javascript">
+
+function formSubmit()
+  {
+  document.getElementById("myForm").submit();
+  }
+</script>
+</head>
+
+<body>
+
+<form id="myForm" action="Food.php" method="post">
+Firstname: <input type="text" name="firstname" size="20"><br />
+Lastname: <input type="text" name="lastname" size="20"><br />
+<br />
+
+
+餐點選擇:<br/>
+	  前菜(5選1): <br/>凱薩沙拉:50 <input type="radio"  name="Appetizer" value="one" checked="checked"  ><br/>
+	        和風沙拉:100<input type="radio"   name="Appetizer" value="two"><br/>
+	        龍蝦沙拉:50 <input type="radio"  name="Appetizer" value="three"><br/>
+	        壽司:100 <input type="radio"  name="Appetizer" value="four"><br/>
+	        麵包:50 <input type="radio"  name="Appetizer" value="five"><br/><br/><br/>
+
+
+
+<input type="button" onclick="formSubmit()" value="Submit">
+
+
+
+
+
+
+</form>
+</body>
+
+</html>

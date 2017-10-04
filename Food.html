@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta  charset="utf-8">
+
+</head>
+
+<body>
+<form  action="Food.php" method="post"  Id="FoodForm">
+	訂餐人姓名:<input type="text"  Id="Name"   name="Name" value="steven"><br/>
+	手機:<input type="text" Id="Phone"  name="Phone" onblur="checkPhone();" value="0978-331961" ><br/>
+	電子郵件:<input type="email" Id="Email" name="Email"  onblur="CheckEmail();" value="steven@gmail.com"><br/>
+	訂餐時間:<input type="date" Id="Date" name="Date" onblur="CheckDate();" > <input type="time" Id="Time" name="Time" onblur="CheckTime();" ><br/><br/>  
+	
+	餐點選擇:<br/>
+	  前菜(5選1): <br/>凱薩沙拉:50 <input type="radio"  name="Appetizer" value="one" checked="checked"  ><br/>
+	        和風沙拉:100<input type="radio"   name="Appetizer" value="two"><br/>
+	        龍蝦沙拉:50 <input type="radio"  name="Appetizer" value="three"><br/>
+	        壽司:100 <input type="radio"  name="Appetizer" value="four"><br/>
+	        麵包:50 <input type="radio"  name="Appetizer" value="five"><br/><br/><br/>
+
+	  湯(3選1): <br/>牛雜湯:100 <input type="radio"  name="Soup" value="one" checked="checked" ><br/>
+	        番茄湯:50<input type="radio"  name="Soup" value="two"><br/>
+	        玉米濃湯:100 <input type="radio"  name="Soup" value="three"><br/><br/><br/>
+
+
+<fieldset  Id="MainCourseForm"  >
+<legend>MainCourseForm</legend>
+	  主菜(5選2):<br/>莎朗牛排:50<input type="checkbox" name="MainCourse[beef1]" value="01" checked="checked"><br/>
+	            肋眼牛排:100<input type="checkbox" name="MainCourse[beef2]"  value="two" checked="checked"><br/>
+	            松坂牛排:50<input type="checkbox" name="MainCourse[beef3]" value="three"><br/>
+	            豬排:100<input type="checkbox"  name="MainCourse[four]"  value="four"><br/>
+	            雞腿排:50<input type="checkbox" name="MainCourse[five]"  value="five"><br/><br/><br/>
+</fieldset>
+
+
+<fieldset  Id="LittleCourse" name="LittleCourse" >
+<legend>LittleCourse</legend>
+	  小菜(4選3):<br/>筍子:100<input type="checkbox"  name="LittleCourse[one]" checked="checked"><br/>
+	            豆腐:50<input type="checkbox"   name="LittleCourse[two]" checked="checked"><br/>
+	            豬耳朵:100<input type="checkbox"  name="LittleCourse[three]" checked="checked" ><br/>
+	            小魚乾:50<input type="checkbox"  name="LittleCourse[four]"><br/><br/><br/>
+
+</fieldset>
+
+	  飲料(4選1): <br/>果汁:100 <input type="radio"  name="drink" value="one" checked="checked"  ><br/>
+	        汽水:50<input type="radio"  name="drink" value="two"><br/>
+	        啤酒:100 <input type="radio"  name="drink" value="three"><br/>
+	        養樂多:50 <input type="radio"  name="drink"  value="four"><br/><br/><br/>
+
+
+
+	  辣度:<input type="range" min=0 max=20 Id="Spiciness" name="Spiciness" onChange="ChangeSpic();" > <a Id="SpicNumber">0</a>  <br/>
+	  餐具顏色:<input type="color" Id="Color" name="Color"><br/>
+	  餐點數量:<input type="text" Id="FoodNumber"  name="FoodNumber" onblur="MeatNumber();"  value="1" ><br/>
+	  備註(額外需求):<input type="textarea" Id="Other" name="Other"><br/>
+	  <input type="button" value="算出總金額" onClick="FinalCheck();"><br/><br/>
+
+
+</form>
+<script type="text/javascript" src="Food.js"></script>
+
+</body>
+</html>

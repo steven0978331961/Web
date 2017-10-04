@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"  name="viewport" content="width=device-width, initial-scale=1">
+<title>登入</title>
+ <link rel="stylesheet" href="http://www.w3ii.com/lib/w3.css">
+<script src="WebFunction.js"></script>
+</head>
+
+<body align="center" >
+
+
+
+<form action="index.php" method="post" >
+ <h1>員工註冊(POST傳送)</h1><br/>
+
+
+  ID：<br/><input name="user_ID" type="text"><br/><br/>
+  Name：<br/><input name="user_Name" type="text"><br/><br/>
+
+
+  Gender:<br/>  
+  <select name="user_Gender">
+　    <option value="Boy">男</option>
+　    <option value="Girl">女</option>　
+  </select><br/><br/>
+
+
+
+  Phone:<br/> <input name="user_Phone" type="text"   Id="user_Phone" onblur="CheckPhone()" ><br/><br/>
+  Mail :<br/><input name="user_Mail" type="text" Id="user_Email"  onblur="CheckEmail()" ><br/><br/>
+  <input name="submit" type="submit" value="login"  >
+
+</form>
+<br><br><br>
+
+<form action="index.php" method="get">
+  <h1>班表及時間(GET傳送)</h1><br>
+  <select Id="user_Class">
+　    <option value="One" >班別一</option>
+　    <option value="Two">班別二</option>
+      <option value="Three">班別三</option>
+  </select><br/><br/>
+
+  
+<button type="button" onClick="TransTime();"  class="w3-btn w3-blue" style="margin-left:0px; border:0; " >Find</button><br/>
+ 
+</form>
+
+
+
+
+
+
+
+
+</body>
+</html>

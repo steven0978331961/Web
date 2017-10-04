@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta  charset="utf-8">
+<script type="text/javascript" src="Food.js"></script>
+</head>
+
+<body>
+
+<form  action="Food.php" method="post"  Id="SearchFoodForm">
+
+搜尋人ID:<input type="text" Id="SearchPeople"  name="SearchPeople"  value="1" ><br/>
+
+  <input type="button" value="算出總金額" onClick="XMLTEST();"><br/><br/>
+</form>
+<br/><br/>
+<br/><br/>
+
+
+<form  action="Food.php" method="post"  Id="UpdateFoodForm">
+
+修改人ID:<input type="text" Id="UpdatePeople"  name="UpdatePeople"  value="1" ><br/>
+修改人電話:<input type="text" Id="UpdatePhone"  name="UpdatePhone"  value="0978-331961" ><br/>
+  <input type="button" value="算出總金額" onClick="Update();"><br/><br/>
+</form>
+<br/><br/>
+<br/><br/>
+
+
+
+<form  action="Food.php" method="post"  Id="DeleteFoodForm">
+刪除人Id:<input type="text" Id="DeletePeople"  name="DeletePeople"  value="1" ><br/>
+
+<input type="button" value="算出總金額" onClick="Delete();"><br/><br/>
+
+
+</body>
+
+</html>
