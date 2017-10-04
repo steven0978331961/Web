@@ -51,12 +51,21 @@ echo "YES";
     ,$_POST["Color"]
     ,$_POST["FoodNumber"]
     ,$_POST["Other"]
-    );*/
+    );
+    */
 	//print_r($_POST);
+
+
 
  if(!empty($_POST["DeletePeople"])  ){
    //echo json_encode(Test());
  	SQLUse_Delete($_POST["DeletePeople"]);
+    }
+
+ if(!empty($_POST["UpdatePeople"]) && !empty($_POST["UpdatePhone"])  ){
+   //echo json_encode(Test());
+
+  SQLUse_Update($_POST["UpdatePeople"],$_POST["UpdatePhone"]);
     }
 
     //SQLUse_Delete($_POST["DeletePeople"]);
@@ -262,6 +271,8 @@ $Delete->execute();
    catch(PDOException $e){
         echo $e ->getMessage();
  }
+
+ echo ("Update  OK");
 }
 
 

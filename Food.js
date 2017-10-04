@@ -295,7 +295,7 @@ xmlhttp.send();
 */
 xmlhttp.open("POST","Food.php",true);
 xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-xmlhttp.send("UpdatePeople="+document.getElementById("UpdatePeople").value+",UpdatePhone="+document.getElementById("UpdatePhone").value);
+xmlhttp.send("UpdatePeople="+document.getElementById("UpdatePeople").value+"&UpdatePhone="+document.getElementById("UpdatePhone").value);
 
 	 //document.getElementById("UpdateFoodForm").submit();
 
