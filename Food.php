@@ -233,6 +233,7 @@ $Delete->execute();
  }
 
  echo("Delete OK");
+ echo("egeg");
 }
 
 
