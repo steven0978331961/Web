@@ -18,7 +18,7 @@ var RealY;
 var RealMo;
 var RealDate;
 var NowDate;
-console.log(Date1);
+
 if(Date1!=null){
 	console.log(Date1);
     SetTime();
@@ -305,20 +305,26 @@ xmlhttp.send("UpdatePeople="+document.getElementById("UpdatePeople").value+"&Upd
 
 
 function Search(){
-	 document.getElementById("SearchPeople").value ;
+document.getElementById("SearchPeople").value ;
+
 
 xmlhttp=new XMLHttpRequest();
-
 xmlhttp.onreadystatechange=function()
   {
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
-    document.getElementById("SearchPeople").value=xmlhttp.responseText;
+   // console.log( JSON.parse(xmlhttp.responseText));   
+   document.getElementById("SearchPeople").value=xmlhttp.responseText;
+
     }
   }
-
+/*
 xmlhttp.open("GET","Food.php?a=2",true);
 xmlhttp.send();
+*/
+xmlhttp.open("POST","Food.php",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("SearchPeople="+document.getElementById("SearchPeople").value);
 
 
 

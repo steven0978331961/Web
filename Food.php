@@ -57,6 +57,12 @@ echo "YES";
 
 
 
+if(!empty($_POST["SearchPeople"])  ){
+	SQLUse_Select($_POST["SearchPeople"]);
+
+}
+
+
  if(!empty($_POST["DeletePeople"])  ){
    //echo json_encode(Test());
  	SQLUse_Delete($_POST["DeletePeople"]);
@@ -172,8 +178,6 @@ function SQLUse_Select($SearchPeople){
  $DbName="test";
  $UserName="root";
  $PassWord="0000";
-
-
  try{/*
    $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
    $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -186,9 +190,7 @@ $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
 $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 /*
 $SQL = 'SELECT Name=:SearchPeople FROM Food4 ';
-//$Connect->bindParam(":SearchPeople" ,$SearchPeople);
 
-//$Delete->bindParam(":UpdatePhone",$UpdatePhone);
 
 
     foreach ($Connect->query($SQL) as $row) {
@@ -199,9 +201,17 @@ $SQL = 'SELECT Name=:SearchPeople FROM Food4 ';
 $SQL = 'SELECT Name FROM Food4 WHERE id=:SearchPeople ';
 $Select= $Connect->prepare($SQL);
 $Select->bindParam("SearchPeople",$SearchPeople);
- var_dump( $Select->execute());
+$Select->execute()  ;
 
+$records = $Select->fetchAll();
 
+    //Specify the col_name
+    foreach($records as $record)
+    {
+        echo $record["Name"];
+    }
+
+  //echo ($Select->execute());
 
   }
    catch(PDOException $e){
