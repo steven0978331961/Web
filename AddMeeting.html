@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta  charset="utf-8">
+<script type="text/javascript" src="UnitTest.js"></script>
+<script src="ckeditor/ckeditor.js"></script>
+</head>
+<body>
+
+
+<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post">
+	  會議主題:<input type="text"   maxlength="20" name="Subject"  value="Subject" ><br/><br/>
+	  日期:<input type="date" name="Date" value="2017-11-05" ><br/>
+	  開始時間:<input type="time" name="StartTime" value="16:05" ><br/>
+	  結束時間:<input type="time"  name="FinalTime" value="16:06"><br/>
+	  參與者:<input type="button" value="修改與會人"   href="#" onclick="Open_ChildWindows('MeetingPeople.html');"  >  
+	         <input type="textarea"  Id=Who_Di  name="Participate" value="02" >  <br/>
+
+
+
+
+            <textarea name='content' id="content" rows="10" cols="80"></textarea>
+            <input type = 'button' value = '送出' onclick = 'processData()'><br/><br/>
+
+
+<script>
+CKEDITOR.replace( 'content', {});
+</script>
+
+ <script>
+   function processData(){
+   // getting data
+   var data =String( CKEDITOR.instances.content.getData());
+   alert(data);
+   document.getElementById("AddMeeting").submit();
+   //form.submit();
+  }
+ </script>
+
+參與者:<input type="button" value="修改與會人"   href="#" onclick="RemoveB();"  > 
+       <input type="textarea"  Id=Who_Di  name="Helper" value="02" >  <br/>
+
+	  部門: <select name="Department"  >
+	  	       <option value="Taipei"  checked=true >電商</option>
+　             <option value="Taoyuan">資訊</option>
+　             <option value="Hsinchu">編輯</option>
+　             <option value="Miaoli">跨部門</option>
+
+	  	   </select><br/>
+	  附件:<input type="file" name="file[]" multiple="multiple" required="required" draggable="true" ><br/><br/><br/>
+
+
+
+	  工作進度:<br/>
+	  工作名:<input type="text" name="WorkName" value="Work" maxlength="20" ><br/>
+	  截止時間:<input type="date" name="DateLine" value="2017-11-08" ><br/>
+	  協作者:<input type="button" value="修改與會人"   href="#" onclick="Open_ChildWindows('MeetingPeople2.html');" > 
+	         <input type="textarea"  Id=Who_Di2  name="WorkPeople"   value="02">  <br/>
+
+
+	  狀態:<select name="State">
+	  	       <option value="Taipei">進行</option>
+　             <option value="Taoyuan">終止</option>
+　             <option value="Hsinchu">消失</option>
+　             <option value="Miaoli">跨部門</option>
+
+	  	   </select><br/>
+      <input type="button" value="完成紀錄" onClick="Summit();"><br/><br/>
+
+
+</form>
+
+</body>
+
