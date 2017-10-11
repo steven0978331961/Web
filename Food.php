@@ -2,8 +2,14 @@
 
 
 if($_GET){
-	echo $_GET["a"];
+	echo json_decode( $_GET["a"]);
 	echo "Yes";
+//foreach ($_GET["a"] as $key => $value) {
+  
+//}
+
+
+
 }
 
 

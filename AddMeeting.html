@@ -3,42 +3,39 @@
 <head>
 <meta  charset="utf-8">
 <script type="text/javascript" src="UnitTest.js"></script>
-<script src="ckeditor/ckeditor.js"></script>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://www.w3ii.com/lib/w3.css">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+
 </head>
-<body>
 
+<style>
+html , body ,button {
+font-family: "Comic Sans MS", cursive, sans-serif;
+}
+</style>
 
-<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post">
-	  會議主題:<input type="text"   maxlength="20" name="Subject"  value="Subject" ><br/><br/>
-	  日期:<input type="date" name="Date" value="2017-11-05" ><br/>
-	  開始時間:<input type="time" name="StartTime" value="16:05" ><br/>
-	  結束時間:<input type="time"  name="FinalTime" value="16:06"><br/>
-	  參與者:<input type="button" value="修改與會人"   href="#" onclick="Open_ChildWindows('MeetingPeople.html');"  >  
-	         <input type="textarea"  Id=Who_Di  name="Participate" value="02" >  <br/>
-
+<body     style=" background: url('01.jpg'); background-size: cover;" onload="Add_Plugin();" >
 
 
 
-            <textarea name='content' id="content" rows="10" cols="80"></textarea>
-            <input type = 'button' value = '送出' onclick = 'processData()'><br/><br/>
+<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"  style="margin-left:300px"   enctype="multipart/form-data" >
+	  <a style="font-size:70px;" >會議主題:</a> <input type="text"   style="margin-left:20px width=500px"    maxlength="20" name="Subject"  value="Subject" ><br/><br/>
+	  日期:<input type="date" name="Date" value="2017-11-05" >
+	  開始時間:<input type="time" name="StartTime" value="16:05" >
+	  結束時間:<input type="time"  name="FinalTime" value="16:06"><br/> <br/>
+	  參與者:<input type="textarea"  Id=Who_Di  name="Participate" value=""  style="width: 540px"  readonly="value" > 
+	         <input type="button" value="修改與會人"   href="#" onclick="Open_ChildWindows('MeetingPeople.html');"  class="w3-btn w3-round-large"  >  <br/><br/>
 
 
-<script>
-CKEDITOR.replace( 'content', {});
-</script>
 
- <script>
-   function processData(){
-   // getting data
-   var data =String( CKEDITOR.instances.content.getData());
-   alert(data);
-   document.getElementById("AddMeeting").submit();
-   //form.submit();
-  }
- </script>
 
-參與者:<input type="button" value="修改與會人"   href="#" onclick="RemoveB();"  > 
-       <input type="textarea"  Id=Who_Di  name="Helper" value="02" >  <br/>
+            <textarea name='content' id="content" rows="10" cols="80" " ></textarea><br/>
+           
+
 
 	  部門: <select name="Department"  >
 	  	       <option value="Taipei"  checked=true >電商</option>
@@ -46,29 +43,31 @@ CKEDITOR.replace( 'content', {});
 　             <option value="Hsinchu">編輯</option>
 　             <option value="Miaoli">跨部門</option>
 
-	  	   </select><br/>
-	  附件:<input type="file" name="file[]" multiple="multiple" required="required" draggable="true" ><br/><br/><br/>
+	  	   </select>
+	  附件:<input type="file" name="file[]"  Id="file"  style="margin-left:300px" multiple="multiple" required="required" draggable="true"  ><br/><br/><br/>
 
 
 
-	  工作進度:<br/>
-	  工作名:<input type="text" name="WorkName" value="Work" maxlength="20" ><br/>
-	  截止時間:<input type="date" name="DateLine" value="2017-11-08" ><br/>
-	  協作者:<input type="button" value="修改與會人"   href="#" onclick="Open_ChildWindows('MeetingPeople2.html');" > 
-	         <input type="textarea"  Id=Who_Di2  name="WorkPeople"   value="02">  <br/>
-
-
-	  狀態:<select name="State">
+	  <a  style="font-size:30px;"   >工作進度:</a><br/>
+	  工作名:<input type="text" name="WorkName"  Id="WorkName" value="Work" maxlength="20" > 截止時間:<input type="date" name="DateLine"             Id="DateLine" value="2017-11-08" >
+      狀態:<select  Id="State" name="State">
 	  	       <option value="Taipei">進行</option>
 　             <option value="Taoyuan">終止</option>
 　             <option value="Hsinchu">消失</option>
 　             <option value="Miaoli">跨部門</option>
 
 	  	   </select><br/>
-      <input type="button" value="完成紀錄" onClick="Summit();"><br/><br/>
+	  <br/>
+	  協作者:<input type="textarea"  Id=Who_Di2  name="WorkPeople"  style="width: 450px"  value="" readonly="value" > 
+	  <input type="button" value="修改與會人"   class="w3-btn w3-round-large"  href="#" onclick="Open_ChildWindows('MeetingPeople2.html');" > 
+	  <input type="button" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" >   
+      <textarea name="Task" id="Task" rows="10" cols="80" "  readonly="true" ></textarea><br/>
+      <input type="text"  Id="DeleteTaskId"> 
+      <input type="button" value="刪除任務"   class="w3-btn w3-round-large"  href="#" onclick="DeleteTask()" >     
+
+	    <input type="button" value="完成紀錄"   class="w3-btn w3-round-large"  onclick="Summit();"><br/><br/>
 
 
 </form>
 
 </body>
-
