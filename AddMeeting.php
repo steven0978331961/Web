@@ -13,7 +13,7 @@ $location = 'C:/xampp/uploads/';
 
 SQLUse_Create();
 
-
+echo  $_POST["Subject"];
 
 SQLUse_insert( $_POST["Subject"]
 ,$_POST["Participate"]
@@ -91,30 +91,35 @@ function SQLUse_Create(){
  $UserName="root";
  $PassWord="0000";
 
+
+
+
+
  try{
- 	 $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
+ 	 $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName .";charset=utf8");
 	 $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   $Connect->exec("set names utf8");
  	
  	$CreateTable1="CREATE TABLE IF NOT EXISTS Meetings(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
- 	,M_subject VARCHAR(10)NOT NULL
- 	,M_users VARCHAR(50)NOT NULL
- 	,M_content  Text NOT NULL
- 	,M_date  Date NOT NULL
+ 	,M_subject VARCHAR(10)  COLLATE utf8mb4_unicode_ci  NOT NULL
+ 	,M_users VARCHAR(50)  COLLATE utf8mb4_unicode_ci NOT NULL
+ 	,M_content  Text    COLLATE utf8mb4_unicode_ci NOT NULL
+ 	,M_date  Date    COLLATE utf8mb4_unicode_ci NOT NULL
  	,M_starttime TIME NOT NULL
  	,M_endtime  TIME NOT NULL
- 	,M_recoder VARCHAR(50)NOT NULL
- 	,M_files VARCHAR(100)NOT NULL
- 	,M_department VARCHAR(20)NOT NULL
+ 	,M_recoder VARCHAR(50)    COLLATE utf8mb4_unicode_ci NOT NULL
+ 	,M_files VARCHAR(100)   COLLATE utf8mb4_unicode_ci NOT NULL
+ 	,M_department VARCHAR(20)   COLLATE utf8mb4_unicode_ci NOT NULL
  	,M_createTime TIME NOT NULL
  	,M_status INT(1) NOT NULL
  	,reg_date TIMESTAMP
- 	 )";
+ 	 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='會議紀錄' ";
 
  	 $CreateTable2="CREATE TABLE IF NOT EXISTS TaskProcess(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
- 	,T_subject VARCHAR(10)NOT NULL
- 	,T_name VARCHAR(50)NOT NULL
+ 	,T_subject VARCHAR(10)   COLLATE utf8mb4_unicode_ci NOT NULL
+ 	,T_name VARCHAR(50)   COLLATE utf8mb4_unicode_ci NOT NULL
  	,T_dateline  DATE NOT NULL
- 	,T_coll  VARCHAR(50) NOT NULL
+ 	,T_coll  VARCHAR(50)    COLLATE utf8mb4_unicode_ci NOT NULL  COMMENT '協作者'
  	,T_status INT(4) NOT NULL
  	,T_finishdate  DATE NOT NULL
  	,T_department VARCHAR(50)NOT NULL
@@ -155,14 +160,15 @@ function SQLUse_insert($M_subject
  	 // echo"<br/>";
 
 try{
-       $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
+       $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName.";charset=UTF-8");
        $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       $Connect->exec("set names utf8");
         //insert
 
       	$Insert= $Connect->prepare("INSERT INTO meetings(M_subject,M_users,M_content,M_date,M_starttime,M_endtime,M_recoder,M_files
         ,M_department,M_createTime ,M_status)Values(:M_subject,:M_users,:M_content,:M_date,:M_starttime,:M_endtime,:M_recoder,:M_files
         ,:M_department,:M_createTime ,:M_status )" );
-      	$Insert->bindParam(":M_subject",$M_subject);
+      	$Insert->bindParam(":M_subject",$M_subject );
 
         $Susers= serialize($M_users) ;
       	$Insert->bindParam(":M_users",$Susers);

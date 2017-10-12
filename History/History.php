@@ -34,6 +34,8 @@
 		{
 			//new、search
 			$query = "SELECT `M_id`, `M_subject`, `M_department`, `M_users`, `M_date`, `M_recoder`, `M_files` FROM `Meetings` WHERE `M_status` = 0 ";
+
+			//echo $query;
 			if(isset($_POST['s_MtName']) != '')
 			{
 				$query = $query."AND `M_subject` LIKE '%".":s_MtName"."%' ";
@@ -42,6 +44,7 @@
 			{
 				$query = $query."AND `M_date` >= :s_MtStartDate ";
 			}
+			/*
 			if(isset($_POST['s_MtEndDate']) != '')
 			{
 				$query = $query."AND `M_date` <= :s_MtEndDate ";
@@ -50,7 +53,7 @@
 			{
 				$query = $query."AND `M_department` = :s_MtDepart ";
 			}
-			
+			*/
 			$query = $query."ORDER BY `M_createtime` DESC ";
 			if($_POST['action'] == "new")
 				$query = $query."LIMIT 10";
@@ -63,6 +66,7 @@
 			{
 				$sth->bindParam(':s_MtStartDate', $_POST['s_MtStartDate'], PDO::PARAM_STR);
 			}
+			/*
 			if(isset($_POST['s_MtEndDate']) != '')
 			{
 				$sth->bindParam(':s_MtEndDate', $_POST['s_MtEndDate'], PDO::PARAM_STR);
@@ -70,7 +74,7 @@
 			if(isset($_POST['s_MtDepart']) != '')
 			{
 				$sth->bindParam(':s_MtDepart', $_POST['s_MtDepart'], PDO::PARAM_STR);
-			}
+			}*/
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_BOTH);			
 			foreach ($result as $row) 
