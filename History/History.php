@@ -49,8 +49,7 @@
 			if(isset($_POST['s_MtDepart']) != '')
 			{
 				$query = $query."AND `M_department` = :s_MtDepart ";
-			}
-			
+			}	
 			$query = $query."ORDER BY `M_createtime` DESC ";
 			if($_POST['action'] == "new")
 				$query = $query."LIMIT 10";
@@ -89,15 +88,27 @@
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
-		}
-		function Detail()
-		{
-			$query = "SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`,
-			          `M_recoder`, `M_files`, `M_status`, `M_createtime` FROM `Meetings` WHERE `M_id` = :M_id";
+			
+			$query = "SELECT COUNT(`M_id`) AS CNT FROM `Meetings` WHERE `M_id` = :M_id AND `M_status` = 1";
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
 			$result = $sth->fetch();
+			if($result['CNT'] == 1)
+				echo json_encode("DeleteSuccess");
+			else
+				echo json_encode("DeleteFail");
+		}
+		function Detail()
+		{
+			$query = "SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`,
+			          `M_recoder`, `M_files`, `M_status`, `M_createtime`
+					  FROM `Meetings` JOIN `Taskprocess` ON `Meetings`.`M_subject` = `T_subject` WHERE `M_id` = :M_id";
+			$sth = $this->database->prepare($query);
+			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
+			$sth->execute();
+			$result = $sth->fetch();
+			echo json_encode($result);
 		}
 	}
 	$action = $_POST['action'];
@@ -116,16 +127,17 @@
 		}
 		case "Edit":
 		{
-			$_SESSION['ID'] = $_POST['id'];
-			$_SESSION['type'] = $_POST['type'];
 			echo 'Edit';
 			break;
 		}
 		case "Delete":
 		{
-			$_SESSION['type'] = $_POST['type'];
 			$mb -> Del();
-			$mb -> FormShow();
+			break;
+		}
+		case "Detail":
+		{
+			$mb -> Detail();
 			break;
 		}
 	}

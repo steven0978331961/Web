@@ -7,7 +7,6 @@ window.onload = function ()
 	//5.刪除資料
 	//6.跳頁至AddMeeting並帶入資料
 	var data;
-	var grid;
 	var page_num = 1;
 	var type = '';
 	var datanum = document.getElementById("DataNum").value;
@@ -33,10 +32,9 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				console.log(request.responseText);
 				data = JSON.parse(request.responseText);
 				GridView();
-				PageList();
+				PageList(data.length);
 			}
 		};
 		request.open("POST", "History.php");
@@ -45,46 +43,118 @@ window.onload = function ()
 	function GridView()
 	{
 		//grid資料依datanum 筆數顯示
-		grid = data.historys;
 		if (data == "nothing")
 		{
 			result = '<tr><td colspan = 8 >查無資料</td></tr>';
 		}
 		else
 		{
+			
 			var j = datanum;
 			var i = (page_num-1)*datanum;
-			if ((grid.length-i) < datanum)
-				j = grid.length;
+			if ((data.length - i) < datanum)
+				j = data.length;
 			var result = "";
 			for(;i < j; i++)
 			{
 				result = result +
-					'<tr class = "full-msg" id = "' + grid[i].pk + '">' +
-						'<td>' + grid[i].M_date + '</td>' +
-						'<td>' + grid[i].M_subject + '</td>' +
-						'<td>' + grid[i].M_department + '</td>' + 
-						'<td>' + grid[i].M_users + '</td>' + 
-						'<td>' + grid[i].M_files + '</td>' + 					
+					'<tr class = "full-msg" id = "' + data[i].M_id + '">' +
+						'<td>' + data[i].M_date + '</td>' +
+						'<td>' + data[i].M_subject + '</td>' +
+						'<td>' + data[i].M_department + '</td>' + 
+						'<td>' + data[i].M_users + '</td>' + 
+						'<td>' + data[i].M_files + '</td>' + 					
 						'<td>' +
-							'<button class="detail" type="button" id="detail-' + grid[i].pk + '"></button>' +
-							'<button name="edit" class="edit" type="button" id="edit-' + grid[i].pk + '"></button>' +
-							'<button class="delete" type="button" id="delete-' + grid[i].pk + '"></button>' +
+							'<button class="detail" type="button" id="detail-' + data[i].M_id + '">詳細資料</button>' +
+							'<button class="edit" type="button" id="edit-' + data[i].M_id + '">編輯</button>' +
+							'<button class="delete" type="button" id="delete-' + data[i].M_id + '">刪除</button>' +
 						'</td>' +
 					'</tr>';
 			}
 		}
 		document.getElementById("result").innerHTML = result;
+		var del = document.getElementsByClassName("delete");
+		for(var i = 0; i < del.length; i++)
+			del[i].onclick = function() {Delete(this.id, i)};
+		var det = document.getElementsByClassName("detail");
+		for(var i = 0; i < det.length; i++)
+			det[i].onclick = function() {Detail(this.id)};
+	}
+	function Delete(id, n)
+	{
+		var delData = new FormData();
+		delData.append("action", "Delete");
+		delData.append("M_id", id.substring(id.indexOf("-")+1));
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function()
+		{
+			if(request.readyState == 4 && request.status == 200)
+			{
+				if(JSON.parse(request.responseText) == "DeleteSuccess")
+				{
+					data.splice(n, 1);
+					GridView();
+					PageList(data.length);
+				}
+				else
+					alert("刪除失敗！");
+			}
+		};
+		request.open("POST", "History.php");
+		request.send(delData);
+	}
+	function Detail(id)
+	{
+		var detData = new FormData();
+		detData.append("action", "Detail");
+		detData.append("M_id", id.substring(id.indexOf("-")+1));
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function()
+		{
+			if(request.readyState == 4 && request.status == 200)
+			{
+				if(JSON.parse(request.responseText) != "DetailFail")
+				{
+					var winObj = window.open('History_Detail.html');
+					winObj.document.getElementById("d_MtSubject").value  = "test";
+					winObj.document.getElementById("d_MtDate").value  = "";
+					winObj.document.getElementById("d_MtStartTime").value  = "";
+					winObj.document.getElementById("d_MtEndTime").value  = "";
+					winObj.document.getElementById("d_MtUsers").value  = "";
+					winObj.document.getElementById("d_MtDepart").value  = "";
+					winObj.document.getElementById("d_MtContent").value  = "";
+					winObj.document.getElementById("d_MtFiles").value  = "";
+					winObj.document.getElementById("d_TpName").value  = "";
+					winObj.document.getElementById("d_TpDeadline").value  = "";
+					winObj.document.getElementById("d_TpColl").value  = "";
+					winObj.document.getElementById("d_TpStatus").value  = "";
+				}
+				else
+					alert("明細讀取失敗！");
+			}
+		};
+		request.open("POST", "History.php");
+		request.send(detData);
+	}
+	function PageChange(id)
+	{
+		page_num = parseInt(id.substring(id.indexOf("-")+1));
+		GridView();
 	}
 	function PageList(num)
 	{
 		//頁數顯示
 		var j = Math.ceil(num/datanum);
+		alert(j);
 		var btn = "";
 		for (i = 0; i < j; i++)
 		{
 			btn = btn + 
-			'<li><a href = "#" id="Page-'+(i+1)+'">'+(i+1)+'</a></li>';
+			'<li><a href = "#" id = "Page-'+(i+1)+'">'+(i+1)+'</a></li>';
 		}
+		document.getElementById("page-change").innerHTML = btn;
+		var page = document.getElementsByClassName("page-change");
+		for(var i = 0; i < page.length; i++)
+			page[i].onclick = function() {PageChange(this.id)};
 	}
 }
