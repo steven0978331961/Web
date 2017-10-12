@@ -1,6 +1,6 @@
 <?php
 
-
+echo  "紀錄完成";
 if($_POST){
 
 //echo $_POST["TaskArray"];
@@ -96,7 +96,7 @@ function SQLUse_Create(){
 	 $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
  	
  	$CreateTable1="CREATE TABLE IF NOT EXISTS Meetings(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
- 	,M_subjuct VARCHAR(10)NOT NULL
+ 	,M_subject VARCHAR(10)NOT NULL
  	,M_users VARCHAR(50)NOT NULL
  	,M_content  Text NOT NULL
  	,M_date  Date NOT NULL
@@ -111,7 +111,7 @@ function SQLUse_Create(){
  	 )";
 
  	 $CreateTable2="CREATE TABLE IF NOT EXISTS TaskProcess(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
- 	,T_subect VARCHAR(10)NOT NULL
+ 	,T_subject VARCHAR(10)NOT NULL
  	,T_name VARCHAR(50)NOT NULL
  	,T_dateline  DATE NOT NULL
  	,T_coll  VARCHAR(50) NOT NULL
@@ -130,7 +130,7 @@ function SQLUse_Create(){
 }
 
 
-function SQLUse_insert($M_subjuct
+function SQLUse_insert($M_subject
 ,$M_users
 ,$M_content
 ,$M_date
@@ -159,10 +159,10 @@ try{
        $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         //insert
 
-      	$Insert= $Connect->prepare("INSERT INTO meetings(M_subjuct,M_users,M_content,M_date,M_starttime,M_endtime,M_recoder,M_files
-        ,M_department,M_createTime ,M_status)Values(:M_subjuct,:M_users,:M_content,:M_date,:M_starttime,:M_endtime,:M_recoder,:M_files
+      	$Insert= $Connect->prepare("INSERT INTO meetings(M_subject,M_users,M_content,M_date,M_starttime,M_endtime,M_recoder,M_files
+        ,M_department,M_createTime ,M_status)Values(:M_subject,:M_users,:M_content,:M_date,:M_starttime,:M_endtime,:M_recoder,:M_files
         ,:M_department,:M_createTime ,:M_status )" );
-      	$Insert->bindParam(":M_subjuct",$M_subjuct);
+      	$Insert->bindParam(":M_subject",$M_subject);
 
         $Susers= serialize($M_users) ;
       	$Insert->bindParam(":M_users",$Susers);
@@ -201,7 +201,7 @@ try{
 }
 
 
-function SQLUse_insertTask($T_subect
+function SQLUse_insertTask($T_subject
 ,$T_name 
 ,$T_dateline
 ,$T_coll 
@@ -220,9 +220,9 @@ try{
        $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
        $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $Insert= $Connect->prepare("INSERT INTO taskprocess(T_subect,T_name,T_dateline,T_coll,T_status,T_finishdate,T_department)
-          Values(:T_subect,:T_name,:T_dateline,:T_coll,:T_status,:T_finishdate,:T_department )" );
-        $Insert->bindParam(":T_subect",$T_subect);      
+        $Insert= $Connect->prepare("INSERT INTO taskprocess(T_subject,T_name,T_dateline,T_coll,T_status,T_finishdate,T_department)
+          Values(:T_subject,:T_name,:T_dateline,:T_coll,:T_status,:T_finishdate,:T_department )" );
+        $Insert->bindParam(":T_subject",$T_subject);      
         $Insert->bindParam(":T_name",$T_name);      
         $Insert->bindParam(":T_dateline",$T_dateline);
         $ST_coll= serialize($T_coll) ;

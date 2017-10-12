@@ -18,12 +18,13 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 }
 </style>
 
-<body     style=" background: url('01.jpg'); background-size: cover;" onload="Add_Plugin();" >
+<body     style=" background: url('01.jpg'); background-size: cover;" onload="Add_Plugin();"  >
 
 
 
-<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"  style="margin-left:300px"   enctype="multipart/form-data" >
-	  <a style="font-size:70px;" >會議主題:</a> <input type="text"   style="margin-left:20px width=500px"    maxlength="20" name="Subject"  value="Subject" ><br/><br/>
+<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"     enctype="multipart/form-data"  >
+	<div style="margin-left:450px">
+	  <a style="font-size:70px;" >會議主題:</a> <input type="text"   style="margin-left:20px width=500px"    maxlength="20" name="Subject"  value="Subject"  Id="Subject" ><br/><br/>
 	  日期:<input type="date" name="Date" value="2017-11-05" >
 	  開始時間:<input type="time" name="StartTime" value="16:05" >
 	  結束時間:<input type="time"  name="FinalTime" value="16:06"><br/> <br/>
@@ -58,16 +59,19 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 
 	  	   </select><br/>
 	  <br/>
-	  協作者:<input type="textarea"  Id=Who_Di2  name="WorkPeople"  style="width: 450px"  value="" readonly="value" > 
+	  協作者:<input type="textarea"  Id=Who_Di2  name="WorkPeople"  style="width: 350px"  value="" readonly="value" >  
 	  <input type="button" value="修改與會人"   class="w3-btn w3-round-large"  href="#" onclick="Open_ChildWindows('MeetingPeople2.html');" > 
-	  <input type="button" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" >   
-      <textarea name="Task" id="Task" rows="10" cols="80" "  readonly="true" ></textarea><br/>
-      <input type="text"  Id="DeleteTaskId"> 
+	  <input type="button" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" >   <br/><br/><br/>
+   
+   <textarea name="Task" id="Task" rows="10" cols="80" "  readonly="true" ></textarea><br/>  <br/>
+
+      <input type="text"  Id="DeleteTaskId">   
       <input type="button" value="刪除任務"   class="w3-btn w3-round-large"  href="#" onclick="DeleteTask()" >     
 
 	    <input type="button" value="完成紀錄"   class="w3-btn w3-round-large"  onclick="Summit();"><br/><br/>
 
-
+</div>
 </form>
+
 
 </body>

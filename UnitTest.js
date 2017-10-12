@@ -73,7 +73,7 @@ function Summit (){
 	//window.location.href=url +"?a="+TaskArray;
 
 
-
+if(checkNull()==true){
   var temp = document.getElementById("AddMeeting");  
     var opt = document.createElement("textarea");
     opt.name = "TaskArray";
@@ -82,6 +82,7 @@ function Summit (){
 
 	var data =CKEDITOR.instances.content.getData();
 	document.getElementById("AddMeeting").submit();
+}
 	//alert(document.getElementById("Content").innerHTML );
 
 }
@@ -125,5 +126,16 @@ function DeleteTask(){
 		document.getElementById("Task").value="";
 	    TaskArray.forEach(TaskPrint ); 
 }
+
+}
+
+
+function  checkNull(){
+	if(document.getElementById("Subject").value.length>0  
+	     ){
+		return true;
+	}
+
+return false;
 
 }
