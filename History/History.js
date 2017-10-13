@@ -113,24 +113,30 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				if(JSON.parse(request.responseText) != "DetailFail")
+				var det = JSON.parse(request.responseText);
+				if(det != "DetailFail")
 				{
 					var winObj = window.open('History_Detail.html');
-					winObj.document.getElementById("d_MtSubject").value  = "test";
-					winObj.document.getElementById("d_MtDate").value  = "";
-					winObj.document.getElementById("d_MtStartTime").value  = "";
-					winObj.document.getElementById("d_MtEndTime").value  = "";
-					winObj.document.getElementById("d_MtUsers").value  = "";
-					winObj.document.getElementById("d_MtDepart").value  = "";
-					winObj.document.getElementById("d_MtContent").value  = "";
-					winObj.document.getElementById("d_MtFiles").value  = "";
-					winObj.document.getElementById("d_TpName").value  = "";
-					winObj.document.getElementById("d_TpDeadline").value  = "";
-					winObj.document.getElementById("d_TpColl").value  = "";
-					winObj.document.getElementById("d_TpStatus").value  = "";
+					winObj.window.onload = function ()
+					{
+						winObj.document.getElementById("d_MtSubject").innerHTML  = det.M_subject;
+						winObj.document.getElementById("d_MtDate").innerHTML  = det.M_date;
+						winObj.document.getElementById("d_MtStartTime").innerHTML  = det.M_starttime;
+						winObj.document.getElementById("d_MtEndTime").innerHTML  = det.M_endtime;
+						winObj.document.getElementById("d_MtUsers").innerHTML  = det.M_users;
+						winObj.document.getElementById("d_MtRecoders").innerHTML  = det.M_recoder;
+						winObj.document.getElementById("d_MtDepart").innerHTML  = det.M_department;
+						winObj.document.getElementById("d_MtContent").innerHTML  = det.M_content;
+						winObj.document.getElementById("d_MtFiles").innerHTML  = det.M_files;
+						winObj.document.getElementById("d_TpName").innerHTML  = det.T_name;
+						winObj.document.getElementById("d_TpDeadline").innerHTML  = det.T_dateline;
+						winObj.document.getElementById("d_TpColl").innerHTML  = det.T_coll;
+						winObj.document.getElementById("d_TpStatus").innerHTML  = det.T_status;
+					}
+					
 				}
 				else
-					alert("明細讀取失敗！");
+					alert("詳細資料讀取失敗！");
 			}
 		};
 		request.open("POST", "History.php");
@@ -145,7 +151,6 @@ window.onload = function ()
 	{
 		//頁數顯示
 		var j = Math.ceil(num/datanum);
-		alert(j);
 		var btn = "";
 		for (i = 0; i < j; i++)
 		{

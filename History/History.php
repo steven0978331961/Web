@@ -101,14 +101,17 @@
 		}
 		function Detail()
 		{
-			$query = "SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`,
-			          `M_recoder`, `M_files`, `M_status`, `M_createtime`
-					  FROM `Meetings` JOIN `Taskprocess` ON `Meetings`.`M_subject` = `T_subject` WHERE `M_id` = :M_id";
+			$query = "SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`, `M_recoder`, `M_files`, `M_status`, ".
+			         "`T_name`, `T_department`, `T_dateline`, `T_coll`, `T_status`, `T_finishdate` ".
+					 "FROM `Meetings` LEFT JOIN `Taskprocess` ON `Meetings`.`M_subject` = `T_subject` WHERE `M_id` = :M_id";
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
 			$result = $sth->fetch();
-			echo json_encode($result);
+			if($result == null)
+				echo json_encode("DetailFail");
+			else
+				echo json_encode($result);
 		}
 	}
 	$action = $_POST['action'];
