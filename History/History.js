@@ -13,7 +13,7 @@ window.onload = function ()
 	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
 	document.getElementById("Next-Page").onclick = function () {page_num = (page_num == Math.ceil(data.length/datanum)? page_num : page_num + 1);GridView();};
 	FormShow("New");
-	//PageList Count
+	
 	function FormShow(btn)
 	{
 		var viewData = new FormData();
@@ -83,26 +83,30 @@ window.onload = function ()
 	}
 	function Delete(id)
 	{
-		var delData = new FormData();
-		delData.append("action", "Delete");
-		delData.append("M_id", id.substring(id.indexOf("-")+1));
-		var request = new XMLHttpRequest();
-		request.onreadystatechange = function()
+		var row = document.getElementById(id.substring(id.indexOf("-")+1)).sectionRowIndex;
+		if(confirm("是否確認刪除會議："+data[row].M_subject+"？"))
 		{
-			if(request.readyState == 4 && request.status == 200)
+			var delData = new FormData();
+			delData.append("action", "Delete");
+			delData.append("M_id", id.substring(id.indexOf("-")+1));
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function()
 			{
-				if(JSON.parse(request.responseText) == "DeleteSuccess")
+				if(request.readyState == 4 && request.status == 200)
 				{
-					data.splice(document.getElementById(id.substring(id.indexOf("-")+1)).sectionRowIndex, 1);
-					GridView();
-					PageList(data.length);
+					if(JSON.parse(request.responseText) == "DeleteSuccess")
+					{
+						data.splice(row, 1);
+						GridView();
+						PageList(data.length);
+					}
+					else
+						alert("刪除失敗！");
 				}
-				else
-					alert("刪除失敗！");
-			}
-		};
-		request.open("POST", "History.php");
-		request.send(delData);
+			};
+			request.open("POST", "History.php");
+			request.send(delData);
+		}
 	}
 	function Detail(id)
 	{
@@ -117,7 +121,7 @@ window.onload = function ()
 				var det = JSON.parse(request.responseText);
 				if(det != "DetailFail")
 				{
-					var winObj = window.open('History_Detail.html');
+					var winObj = window.open('History_Detail.html','詳細資料', 'height=200,width=400,scrollbars=yes');
 					winObj.window.onload = function ()
 					{
 						winObj.document.getElementById("d_MtSubject").innerHTML  = det.M_subject;

@@ -22,18 +22,18 @@
 			</div>
 			<div class = "row">
 				<div class = "col-md-4">
-					<p>會議名稱：<input type = "text" id = "s_MtName"/></p>
-					<p>開始日期：<input type = "date" id = "s_MtStartDate"/></p>
-					<p>結束日期：<input type = "date" id = "s_MtEndDate"/></span>
+					<p>會議名稱：<input type = "text" id = "t_MtName"/></p>
+					<p>開始日期：<input type = "date" id = "t_MtStartDate"/></p>
+					<p>結束日期：<input type = "date" id = "t_MtEndDate"/></span>
 				</div>
 				<div class="col-md-4">
-					<p>工作名稱：<input type = "text" id = "s_TkName"/></p>
-					<p>部門：<select><option value = "資訊">資訊</option>
+					<p>工作名稱：<input type = "text" id = "t_TpName"/></p>
+					<p>部門：<select id = "t_TpDepartment"><option value = "資訊">資訊</option>
 								  <option value = "編輯">編輯</option>
 								  <option value = "企劃">企劃</option>
 								  <option value = "電商">電商</option>
 								  <option value = "跨部門">跨部門</option></select></p>
-					<p>狀態：<select><option value = "0">進行中</option>
+					<p>狀態：<select id = "t_TpStatus"><option value = "0">進行中</option>
 								  <option value = "1">已完成</option>
 								  <option value = "2">已中止</option>
 								  <option value = "3">已刪除</option></select></p>	
@@ -76,18 +76,20 @@
 					</table>
 				</div>
 			</div>
-			<div class = "row" align = "center">
+			<div class = "row">
 				<div class = "col-md-4" ></div>
-				<div class = "col-md-4" >
-					<ul class="pagination">
+				<div class = "col-md-4">
+					<ul class = "pagination">
 						<li>
-							<a href="#">Prev</a>
+							<a href="#" id = "Prev-Page">Prev</a>
 						</li>
+						<ul class = "pagination" id = "pagelist">
+							<li>
+								<a href="#" class = "page_cnt" id = "Page-1">1</a>
+							</li>
+						</ul>
 						<li>
-							<a href="#">...</a>
-						</li>
-						<li>
-							<a href="#">Next</a>
+							<a href="#" id = "Next-Page">Next</a>
 						</li>
 					</ul>
 				</div>
