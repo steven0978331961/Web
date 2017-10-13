@@ -11,8 +11,8 @@ window.onload = function ()
 	var type = '';
 	var datanum = document.getElementById("DataNum").value;
 	document.getElementById("search").onclick = function() {FormShow("Search")};
-	document.getElementById("Prev-Page").onclick = function () {page_num = page_num == 1? 1 : page_num - 1; GridView();};
-	document.getElementById("Next-Page").onclick = function () {page_num = page_num == Math.ceil(page_num/datanum)? page_num : page_num + 1; GridView();};
+	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
+	document.getElementById("Next-Page").onclick = function () {page_num = (page_num == Math.ceil(data.length/datanum)? page_num : page_num + 1);GridView();};
 	FormShow("New");
 	//PageList Count
 	function FormShow(btn)
@@ -49,7 +49,6 @@ window.onload = function ()
 		}
 		else
 		{
-			
 			var j = datanum;
 			var i = (page_num-1)*datanum;
 			if ((data.length - i) < datanum)
@@ -144,6 +143,7 @@ window.onload = function ()
 	}
 	function PageChange(id)
 	{
+		alert(id);
 		page_num = parseInt(id.substring(id.indexOf("-")+1));
 		GridView();
 	}
@@ -155,10 +155,10 @@ window.onload = function ()
 		for (i = 0; i < j; i++)
 		{
 			btn = btn + 
-			'<li><a href = "#" id = "Page-'+(i+1)+'">'+(i+1)+'</a></li>';
+			'<li><a href = "#" class = "page_cnt" id = "Page-'+(i+1)+'">'+(i+1)+'</a></li>';
 		}
-		document.getElementById("page-change").innerHTML = btn;
-		var page = document.getElementsByClassName("page-change");
+		document.getElementById("pagelist").innerHTML = btn;
+		var page = document.getElementsByClassName("page_cnt");
 		for(var i = 0; i < page.length; i++)
 			page[i].onclick = function() {PageChange(this.id)};
 	}
