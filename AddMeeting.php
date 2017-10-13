@@ -1,6 +1,8 @@
 <?php
-
+include_once("PODAction.php");
 echo  "紀錄完成";
+
+SQLUse_Create();
 if($_POST){
 
 //echo $_POST["TaskArray"];
@@ -84,23 +86,8 @@ move_uploaded_file($tmp_name,$location . $name ) ;
 
 
 function SQLUse_Create(){
-
-
- $SeverName="localhost";
- $DbName="test";
- $UserName="root";
- $PassWord="0000";
-
-
-
-
-
- try{
- 	 $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName .";charset=utf8");
-	 $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   $Connect->exec("set names utf8");
  	
- 	$CreateTable1="CREATE TABLE IF NOT EXISTS Meetings(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
+ 	$CreateTable1="CREATE TABLE IF NOT EXISTS Meetings6(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
  	,M_subject VARCHAR(10)  COLLATE utf8mb4_unicode_ci  NOT NULL
  	,M_users VARCHAR(50)  COLLATE utf8mb4_unicode_ci NOT NULL
  	,M_content  Text    COLLATE utf8mb4_unicode_ci NOT NULL
@@ -126,12 +113,12 @@ function SQLUse_Create(){
 
  	,reg_date TIMESTAMP
  	 )";
- 	 $Connect->exec($CreateTable1);
- 	 $Connect->exec($CreateTable2);
-    }
-     catch(PDOException $e){
-        echo $e ->getMessage();
- }
+
+ $a= new PODAction();
+ $a->Creat_Table( $CreateTable1);
+ $a->Creat_Table( $CreateTable2);
+
+
 }
 
 
@@ -146,65 +133,37 @@ function SQLUse_insert($M_subject
 ,$M_department
 ,$M_createTime 
 ,$M_status
-){
-
- $SeverName="localhost";
- $DbName="test";
- $UserName="root";
- $PassWord="0000";
-
-
-
-
- 	 // echo "Connect OK";
- 	 // echo"<br/>";
-
-try{
-       $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName.";charset=UTF-8");
-       $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-       $Connect->exec("set names utf8");
-        //insert
-
-      	$Insert= $Connect->prepare("INSERT INTO meetings(M_subject,M_users,M_content,M_date,M_starttime,M_endtime,M_recoder,M_files
+){        //insert
+        $Prepare="INSERT INTO meetings(M_subject,M_users,M_content,M_date,M_starttime,M_endtime,M_recoder,M_files
         ,M_department,M_createTime ,M_status)Values(:M_subject,:M_users,:M_content,:M_date,:M_starttime,:M_endtime,:M_recoder,:M_files
-        ,:M_department,:M_createTime ,:M_status )" );
-      	$Insert->bindParam(":M_subject",$M_subject );
+        ,:M_department,:M_createTime ,:M_status )" ;
 
         $Susers= serialize($M_users) ;
-      	$Insert->bindParam(":M_users",$Susers);
-
-        $SContent=serialize($M_content);
-      	$Insert->bindParam(":M_content",$SContent);
-      	$Insert->bindParam(":M_date",$M_date);
-      	$Insert->bindParam(":M_starttime",$M_starttime);
-      	$Insert->bindParam(":M_endtime",$M_endtime);
-      	$Insert->bindParam(":M_recoder",$M_recoder);
-        
+        $SContent=serialize($M_content);        
         $SFile=serialize($M_files);      
-      	$Insert->bindParam(":M_files", $SFile ) ;
 
-    
+        $Insert_Array=array(
+          ":M_subject"=>$M_subject,
+          ":M_users"=>$Susers,
+          ":M_content"=>$SContent,
+          ":M_date"=>$M_date,
+          ":M_starttime"=>$M_starttime,
+          ":M_endtime"=>$M_endtime,
+          ":M_recoder"=>$M_recoder,
+          ":M_files"=>$SFile,
+          ":M_department"=>$M_department ,
+          ":M_createTime"=>$M_createTime,
+          ":M_status"=>$M_status
+        );
 
-      	$Insert->bindParam(":M_department",$M_department );
-      	$Insert->bindParam(":M_createTime",$M_createTime);
-      	$Insert->bindParam(":M_status",$M_status);
+        $a= new PODAction();
+        $a->Insert_Table($Prepare,$Insert_Array);
 
 
-
-      	$Insert->execute();
-
-  
-
-
- 	//$Connect->exec($Insert); 
- 	    //echo "Insert OK";
- 	  //  echo"<br/>";
-
- }
- catch(PDOException $e){
-        echo $e ->getMessage();
- }
 }
+
+
+
 
 
 function SQLUse_insertTask($T_subject
@@ -242,6 +201,58 @@ try{
         echo $e ->getMessage();
  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
