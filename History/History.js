@@ -8,7 +8,6 @@ window.onload = function ()
 	//6.跳頁至AddMeeting並帶入資料
 	var data;
 	var page_num = 1;
-	var type = '';
 	var datanum = document.getElementById("DataNum").value;
 	document.getElementById("search").onclick = function() {FormShow("Search")};
 	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
@@ -34,7 +33,10 @@ window.onload = function ()
 			{
 				data = JSON.parse(request.responseText);
 				GridView();
-				PageList(data.length);
+				if(data == "nothing")
+					PageList(1);
+				else
+					PageList(data.length);
 			}
 		};
 		request.open("POST", "History.php");
@@ -74,12 +76,12 @@ window.onload = function ()
 		document.getElementById("result").innerHTML = result;
 		var del = document.getElementsByClassName("delete");
 		for(var i = 0; i < del.length; i++)
-			del[i].onclick = function() {Delete(this.id, i)};
+			del[i].onclick = function() {Delete(this.id)};
 		var det = document.getElementsByClassName("detail");
 		for(var i = 0; i < det.length; i++)
 			det[i].onclick = function() {Detail(this.id)};
 	}
-	function Delete(id, n)
+	function Delete(id)
 	{
 		var delData = new FormData();
 		delData.append("action", "Delete");
@@ -91,7 +93,7 @@ window.onload = function ()
 			{
 				if(JSON.parse(request.responseText) == "DeleteSuccess")
 				{
-					data.splice(n, 1);
+					data.splice(document.getElementById(id.substring(id.indexOf("-")+1)).sectionRowIndex, 1);
 					GridView();
 					PageList(data.length);
 				}
@@ -143,7 +145,6 @@ window.onload = function ()
 	}
 	function PageChange(id)
 	{
-		alert(id);
 		page_num = parseInt(id.substring(id.indexOf("-")+1));
 		GridView();
 	}

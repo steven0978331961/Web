@@ -31,32 +31,33 @@
 			parent ::__construct();
 		}
 		function FormShow()
-		{
+		{	
 			//new、search
 			$query = "SELECT `M_id`, `M_subject`, `M_department`, `M_users`, `M_date`, `M_recoder`, `M_files` FROM `Meetings` WHERE `M_status` = 0 ";
 			if(isset($_POST['s_MtName']) != '')
 			{
-				$query = $query."AND `M_subject` LIKE '%".":s_MtName"."%' ";
+				$query = $query."AND `M_subject` LIKE :s_MtName ";
+				$MtName = '%'.$_POST['s_MtName'].'%';
 			}
 			if(isset($_POST['s_MtStartDate']) != '')
 			{
-				$query = $query."AND `M_date` >= :s_MtStartDate ";
+				$query = $query."AND `M_date` >= STR_TO_DATE(:s_MtStartDate, '%Y/%m/%d/') ";
 			}
 			if(isset($_POST['s_MtEndDate']) != '')
 			{
-				$query = $query."AND `M_date` <= :s_MtEndDate ";
+				$query = $query."AND `M_date` <= STR_TO_DATE(:s_MtEndDate, '%Y/%m/%d/') ";
 			}
 			if(isset($_POST['s_MtDepart']) != '')
 			{
 				$query = $query."AND `M_department` = :s_MtDepart ";
-			}	
+			}
 			$query = $query."ORDER BY `M_createtime` DESC ";
 			if($_POST['action'] == "new")
 				$query = $query."LIMIT 10";
 			$sth = $this->database->prepare($query);
 			if(isset($_POST['s_MtName']) != '')
 			{
-				$sth->bindParam(':s_MtName', $_POST['s_MtName'], PDO::PARAM_STR);
+				$sth->bindParam(':s_MtName', $MtName, PDO::PARAM_STR);
 			}
 			if(isset($_POST['s_MtStartDate']) != '')
 			{
