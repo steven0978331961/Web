@@ -52,7 +52,7 @@ window.onload = function ()
 		}
 		else
 		{
-			var j = datanum;
+			var j = page_num*datanum;
 			var i = (page_num-1)*datanum;
 			if ((data.length - i) < datanum)
 				j = data.length;

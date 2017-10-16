@@ -33,7 +33,8 @@
 		function FormShow()
 		{	
 			//new、search
-			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_status`, `T_finishdate`, `T_department` ".
+			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, ".
+					 'CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status"'.
 					 "FROM `Taskprocess` JOIN `Meetings` ON `Taskprocess`.`T_subject` = `Meetings`.`M_subject` ";
 			$conn = "WHERE";
 			if(isset($_POST['t_MtName']) != '')
@@ -110,22 +111,26 @@
 			else
 				echo json_encode($this->taskp);
 		}
-		function Del()
+		function DFS()
 		{
-			$query = "UPDATE `Meetings` SET `M_status` = 1 WHERE `M_id` = :M_id";
+			$query = "UPDATE `TaskProcess` SET `T_status` = :T_status WHERE `T_subject` = :T_subject AND `T_name` = :T_name";
 			$sth = $this->database->prepare($query);
-			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
+			$sth->bindParam(':T_status', $_POST['T_st'], PDO::PARAM_INT);
+			$sth->bindParam(':T_subject', $_POST['T_subject'], PDO::PARAM_STR);
+			$sth->bindParam(':T_name', $_POST['T_name'], PDO::PARAM_STR);
 			$sth->execute();
 			
-			$query = "SELECT COUNT(`M_id`) AS CNT FROM `Meetings` WHERE `M_id` = :M_id AND `M_status` = 1";
+			$query = "SELECT COUNT(`T_name`) AS CNT FROM `TaskProcess` WHERE `T_status` = :T_status AND `T_subject` = :T_subject AND `T_name` = :T_name";
 			$sth = $this->database->prepare($query);
-			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
+			$sth->bindParam(':T_status', $_POST['T_st'], PDO::PARAM_INT);
+			$sth->bindParam(':T_subject', $_POST['T_subject'], PDO::PARAM_STR);
+			$sth->bindParam(':T_name', $_POST['T_name'], PDO::PARAM_STR);
 			$sth->execute();
 			$result = $sth->fetch();
 			if($result['CNT'] == 1)
-				echo json_encode("DeleteSuccess");
+				echo json_encode("DFSSuccess");
 			else
-				echo json_encode("DeleteFail");
+				echo json_encode("DFSFail");
 		}
 	}
 	$action = $_POST['action'];
@@ -147,9 +152,9 @@
 			echo 'Edit';
 			break;
 		}
-		case "Delete":
+		case "DeleleFinishStop":
 		{
-			$mb -> Del();
+			$mb -> DFS();
 			break;
 		}
 		case "Detail":

@@ -36,7 +36,6 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				console.log(request.responseText);
 				data = JSON.parse(request.responseText);
 				GridView();
 				if(data == "nothing")
@@ -66,7 +65,7 @@ window.onload = function ()
 			for(;i < j; i++)
 			{
 				result = result +
-					'<tr class = "full-msg">' +
+					'<tr class = "full-msg" id = "row-' + i + '">' +
 						'<td>' + data[i].T_subject + '</td>' +
 						'<td>' + data[i].T_name + '</td>' +
 						'<td>' + data[i].T_department + '</td>' + 
@@ -74,22 +73,79 @@ window.onload = function ()
 						'<td>' + data[i].T_coll + '</td>' + 
 						'<td>' + data[i].T_status + '</td>' +						
 						'<td>' +
-							'<button class="edit" type="button">編輯</button>' +
-							'<button class="delete" type="button">刪除</button>' +
-							'<button class="finish" type="button">完成</button>' +
-							'<button class="stop" type="button">中止</button>' +
+							'<button class="edit" type="button" id = "edit-' + i + '">編輯</button>' +
+							'<button class="delete" type="button" id = "delete-' + i + '">刪除</button>' +
+							'<button class="finish" type="button" id = "finish-' + i + '">完成</button>' +
+							'<button class="stop" type="button" id = "stop-' + i + '">中止</button>' +
 						'</td>' +
 					'</tr>';
 			}
 		}
 		document.getElementById("result").innerHTML = result;
+		var fin = document.getElementsByClassName("finish");
+		for(var i = 0; i < fin.length; i++)
+			fin[i].onclick = function() {ActionDFS(this.id, 1)};
+		
+		var stop = document.getElementsByClassName("stop");
+		for(var i = 0; i < stop.length; i++)
+			stop[i].onclick = function() {ActionDFS(this.id, 2)};
+		
 		var del = document.getElementsByClassName("delete");
 		for(var i = 0; i < del.length; i++)
-			del[i].onclick = function() {Delete(this.id)};
+			del[i].onclick = function() {ActionDFS(this.id, 3)};
 		
 		var det = document.getElementsByClassName("detail");
 		for(var i = 0; i < det.length; i++)
 			det[i].onclick = function() {Detail(this.id)};
+	}
+	function ActionDFS(id, st)
+	{
+		var row = document.getElementById("row-"+ id.substring(id.indexOf("-")+1)).sectionRowIndex;
+		switch(st)
+		{
+			case 1:
+			{
+				act = "完成";
+				break;
+			}
+			case 2:
+			{
+				act = "中止";
+				break;
+			}
+			case 3:
+			{
+				act = "刪除";
+				break;
+			}
+			default:
+				break;
+		}
+		if(confirm("是否確認"+act+"工作項目："+data[row].T_name+"？"))
+		{
+			var DFSData = new FormData();
+			DFSData.append("action", "DeleleFinishStop");
+			DFSData.append("T_subject", data[row].T_subject);
+			DFSData.append("T_name", data[row].T_name);
+			DFSData.append("T_st", st);
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function()
+			{
+				if(request.readyState == 4 && request.status == 200)
+				{
+					if(JSON.parse(request.responseText) == "DFSSuccess")
+					{
+						data.splice(row, 1);
+						GridView();
+						PageList(data.length);
+					}
+					else
+						alert(act+"失敗！");
+				}
+			};
+			request.open("POST", "TaskProcess.php");
+			request.send(DFSData);
+		}
 	}
 	function ViewNumChange()
 	{
