@@ -7,12 +7,14 @@ window.onload = function ()
 	//5.刪除資料
 	//6.完成、中止資料更新
 	var data;
+	var temp;
 	var page_num = 1;
 	var datanum = document.getElementById("DataNum").value;
 	document.getElementById("DataNum").onchange = function () {ViewNumChange();};
 	document.getElementById("search").onclick = function () {FormShow("Search");};
 	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
 	document.getElementById("Next-Page").onclick = function () {page_num = (page_num == Math.ceil(data.length/datanum)? page_num : page_num + 1);GridView();};
+	document.getElementById("save").onclick = function () {Save()};
 	FormShow("New");
 	
 	function FormShow(btn)
@@ -73,10 +75,10 @@ window.onload = function ()
 						'<td>' + data[i].T_coll + '</td>' + 
 						'<td>' + data[i].T_status + '</td>' +						
 						'<td>' +
-							'<button class="edit" type="button" id = "edit-' + i + '">編輯</button>' +
-							'<button class="delete" type="button" id = "delete-' + i + '">刪除</button>' +
-							'<button class="finish" type="button" id = "finish-' + i + '">完成</button>' +
-							'<button class="stop" type="button" id = "stop-' + i + '">中止</button>' +
+							'<button type="button" class="btn btn-primary btn-sm edit" data-toggle="modal" data-target="#myModal" id = "edit-' + i + '">編輯</button>' +
+							'<button type="button" class="btn btn-danger btn-sm delete"  id = "delete-' + i + '">刪除</button>' +
+							'<button type="button" class="btn btn-success btn-sm finish"  id = "finish-' + i + '">完成</button>' +
+							'<button type="button" class="btn btn-warning btn-sm stop"  id = "stop-' + i + '">中止</button>' +
 						'</td>' +
 					'</tr>';
 			}
@@ -94,9 +96,9 @@ window.onload = function ()
 		for(var i = 0; i < del.length; i++)
 			del[i].onclick = function() {ActionDFS(this.id, 3)};
 		
-		var det = document.getElementsByClassName("detail");
+		var det = document.getElementsByClassName("edit");
 		for(var i = 0; i < det.length; i++)
-			det[i].onclick = function() {Detail(this.id)};
+			det[i].onclick = function() {Edit(this.id)};
 	}
 	function ActionDFS(id, st)
 	{
@@ -169,12 +171,57 @@ window.onload = function ()
 		var btn = "";
 		for (i = 0; i < j; i++)
 		{
-			btn = btn + 
-			'<li><a href = "#" class = "page_cnt" id = "Page-'+(i+1)+'">'+(i+1)+'</a></li>';
+			btn = btn +
+			'<li><button class = "btn btn-outline-primary btn-sm page_cnt" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
 		}
 		document.getElementById("pagelist").innerHTML = btn;
 		var page = document.getElementsByClassName("page_cnt");
 		for(var i = 0; i < page.length; i++)
 			page[i].onclick = function() {PageChange(this.id)};
+	}
+	
+	//Edit
+	function Edit(id)
+	{
+		temp = data[id.substring(id.indexOf("-")+1)];
+	}
+	$('#myModal').on('show.bs.modal', function ()
+	{
+		document.getElementById("t_mdSubject").innerHTML = temp.T_subject;
+		document.getElementById("t_mdName").innerHTML = temp.T_name;
+		document.getElementById("t_Mddeadline").value = temp.T_deadline;
+		document.getElementById("t_MdColl").value = temp.T_coll;
+		document.getElementById("t_MdDepartment").value = temp.T_department;
+		document.getElementById("t_MdStatus").value = temp.T_stat;
+	})
+	function Save()
+	{
+		temp.clear;
+		$('#myModal').modal('hide');
+		var saveData = new FormData();
+		saveData.append("action", "Save");
+		saveData.append("T_subject", document.getElementById("t_mdSubject").innerHTML);
+		saveData.append("T_name", document.getElementById("t_Mddeadline").innerHTML);
+		saveData.append("T_deadline",document.getElementById("t_Mddeadline").value);
+		saveData.append("T_coll", document.getElementById("t_MdColl").value);
+		saveData.append("T_department", document.getElementById("t_MdDepartment").value);
+		saveData.append("T_status", document.getElementById("t_MdStatus").value);
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function()
+		{
+			if(request.readyState == 4 && request.status == 200)
+			{
+				if(JSON.parse(request.responseText) == "SaveSuccess")
+				{
+					data.splice(row, 1, JSON.parse(request.responseText));
+					GridView();
+					PageList(data.length);
+				}
+				else
+					alert("儲存失敗！");
+			}
+		};
+		request.open("POST", "TaskProcess.php");
+		request.send(saveData);
 	}
 }

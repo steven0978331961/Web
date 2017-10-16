@@ -8,16 +8,18 @@
 		var $T_name;
 		var $T_deadline;
 		var $T_coll;
+		var $T_stat;
 		var $T_status;
 		var $T_finishdate;
 		var $T_department;
 		
-		function __construct($s, $n, $d, $c, $st, $f, $dp)
+		function __construct($s, $n, $d, $c, $stat, $st, $f, $dp)
 		{
 			$this->T_subject = $s;
 			$this->T_name = $n;
 			$this->T_deadline = $d;
 			$this->T_coll = $c;
+			$this->T_stat = $stat;
 			$this->T_status = $st;
 			$this->T_finishdate = $f;
 			$this->T_department = $dp;
@@ -32,9 +34,8 @@
 		}
 		function FormShow()
 		{	
-			//new、search
 			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, ".
-					 'CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status"'.
+					 '`T_status` AS "T_stat",CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status" '.
 					 "FROM `Taskprocess` JOIN `Meetings` ON `Taskprocess`.`T_subject` = `Meetings`.`M_subject` ";
 			$conn = "WHERE";
 			if(isset($_POST['t_MtName']) != '')
@@ -104,7 +105,7 @@
 			foreach ($result as $row) 
 			{
 				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $row['T_coll'],
-														 $row['T_status'], $row['T_finishdate'], $row['T_department']));
+														 $row['T_stat'], $row['T_status'], $row['T_finishdate'], $row['T_department']));
 			}
 			if(count($result) == 0)
 				echo json_encode("nothing");
@@ -157,9 +158,9 @@
 			$mb -> DFS();
 			break;
 		}
-		case "Detail":
+		case "Edit":
 		{
-			$mb -> Detail();
+			$mb -> Edit();
 			break;
 		}
 	}

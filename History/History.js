@@ -171,7 +171,7 @@ window.onload = function ()
 		for (i = 0; i < j; i++)
 		{
 			btn = btn + 
-			'<li><a href = "#" class = "page_cnt" id = "Page-'+(i+1)+'">'+(i+1)+'</a></li>';
+			'<li><button class = "btn btn-outline-primary btn-sm page_cnt" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
 		}
 		document.getElementById("pagelist").innerHTML = btn;
 		var page = document.getElementsByClassName("page_cnt");

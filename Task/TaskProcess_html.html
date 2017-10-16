@@ -7,11 +7,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 		
 		<!--Bootstrap用到JS：jquery、popper、bootstrap-->
-		<!--
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-		-->
 		<script type="text/javascript" src="TaskProcess.js"></script>
 	</head>
 	<body>
@@ -29,15 +27,23 @@
 				</div>
 				<div class="col-md-4">
 					<p>工作名稱：<input type = "text" id = "t_TpName"/></p>
-					<p>部門：<select id = "t_TpDepartment"><option value = "資訊">資訊</option>
-								  <option value = "編輯">編輯</option>
-								  <option value = "企劃">企劃</option>
-								  <option value = "電商">電商</option>
-								  <option value = "跨部門">跨部門</option></select></p>
-					<p>狀態：<select id = "t_TpStatus"><option value = "0">進行中</option>
-								  <option value = "1">已完成</option>
-								  <option value = "2">已中止</option>
-								  <option value = "3">已刪除</option></select></p>	
+					<p>部門：
+						<select id = "t_TpDepartment">
+							<option value = "資訊">資訊</option>
+							<option value = "編輯">編輯</option>
+							<option value = "企劃">企劃</option>
+							<option value = "電商">電商</option>
+							<option value = "跨部門">跨部門</option>
+						</select>
+					</p>
+					<p>狀態：
+						<select id = "t_TpStatus">
+							<option value = "0">進行中</option>
+							<option value = "1">已完成</option>
+							<option value = "2">已中止</option>
+							<option value = "3">已刪除</option>
+						</select>
+					</p>	
 				</div>
 				<div class="col-md-4">
 					<p>每頁顯示<input type = "text" id = "DataNum" value = "5" />筆</p>
@@ -82,19 +88,56 @@
 				<div class = "col-md-4">
 					<ul class = "pagination">
 						<li>
-							<a href="#" id = "Prev-Page">Prev</a>
+							<button class = "btn btn-outline-primary btn-sm" id = "Prev-Page">Prev</button>
 						</li>
 						<ul class = "pagination" id = "pagelist">
 							<li>
-								<a href="#" class = "page_cnt" id = "Page-1">1</a>
+								<button class = "btn btn-outline-primary btn-sm page_cnt" id = "Page-1">1</button>
 							</li>
 						</ul>
 						<li>
-							<a href="#" id = "Next-Page">Next</a>
+							<button class = "btn btn-outline-primary btn-sm" id = "Next-Page">Next</button>
 						</li>
 					</ul>
 				</div>
 				<div class = "col-md-4" ></div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="t_mdSubject"></h5>
+						<h5 class="modal-title" id="t_mdName"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+						<p>截止日期：<input type = "date" id = "t_Mddeadline"/></p>
+						<p>協作者：<input type = "text" id = "t_MdColl"/></p>
+						<p>部門：
+							<select id = "t_MdDepartment">
+								<option value = "資訊">資訊</option>
+								<option value = "編輯">編輯</option>
+								<option value = "企劃">企劃</option>
+								<option value = "電商">電商</option>
+								<option value = "跨部門">跨部門</option>
+							</select>
+						</p>
+						<p>狀態：
+							<select id = "t_MdStatus">
+								<option value = "0">進行中</option>
+								<option value = "1">已完成</option>
+								<option value = "2">已中止</option>
+								<option value = "3">已刪除</option>
+							</select>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+						<button type="button" class="btn btn-primary" id = "save">儲存修改</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
