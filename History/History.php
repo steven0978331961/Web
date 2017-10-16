@@ -41,11 +41,11 @@
 			}
 			if(isset($_POST['s_MtStartDate']) != '')
 			{
-				$query = $query."AND `M_date` >= STR_TO_DATE(:s_MtStartDate, '%Y/%m/%d/') ";
+				$query = $query."AND Date(`M_date`) >= STR_TO_DATE(:s_MtStartDate, '%Y-%m-%d') ";
 			}
 			if(isset($_POST['s_MtEndDate']) != '')
 			{
-				$query = $query."AND `M_date` <= STR_TO_DATE(:s_MtEndDate, '%Y/%m/%d/') ";
+				$query = $query."AND Date(`M_date`) <= STR_TO_DATE(:s_MtEndDate, '%Y-%m-%d') ";
 			}
 			if(isset($_POST['s_MtDepart']) != '')
 			{

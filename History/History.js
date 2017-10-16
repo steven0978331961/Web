@@ -9,7 +9,8 @@ window.onload = function ()
 	var data;
 	var page_num = 1;
 	var datanum = document.getElementById("DataNum").value;
-	document.getElementById("search").onclick = function() {FormShow("Search")};
+	document.getElementById("DataNum").onchange = function () {ViewNumChange();};
+	document.getElementById("search").onclick = function() {FormShow("Search");};
 	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
 	document.getElementById("Next-Page").onclick = function () {page_num = (page_num == Math.ceil(data.length/datanum)? page_num : page_num + 1);GridView();};
 	FormShow("New");
@@ -146,6 +147,16 @@ window.onload = function ()
 		};
 		request.open("POST", "History.php");
 		request.send(detData);
+	}
+	function ViewNumChange()
+	{
+		datanum = document.getElementById("DataNum").value;
+		page_num = 1;
+		GridView();
+		if(data == "nothing")
+			PageList(1);
+		else
+			PageList(data.length);
 	}
 	function PageChange(id)
 	{

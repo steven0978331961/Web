@@ -9,7 +9,8 @@ window.onload = function ()
 	var data;
 	var page_num = 1;
 	var datanum = document.getElementById("DataNum").value;
-	document.getElementById("search").onclick = function() {FormShow("Search")};
+	document.getElementById("DataNum").onchange = function () {ViewNumChange();};
+	document.getElementById("search").onclick = function () {FormShow("Search");};
 	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
 	document.getElementById("Next-Page").onclick = function () {page_num = (page_num == Math.ceil(data.length/datanum)? page_num : page_num + 1);GridView();};
 	FormShow("New");
@@ -35,6 +36,7 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
+				console.log(request.responseText);
 				data = JSON.parse(request.responseText);
 				GridView();
 				if(data == "nothing")
@@ -48,6 +50,7 @@ window.onload = function ()
 	}
 	function GridView()
 	{
+		
 		//grid資料依datanum 筆數顯示
 		if (data == "nothing")
 		{
@@ -55,7 +58,7 @@ window.onload = function ()
 		}
 		else
 		{
-			var j = datanum;
+			var j = page_num*datanum;
 			var i = (page_num-1)*datanum;
 			if ((data.length - i) < datanum)
 				j = data.length;
@@ -64,7 +67,7 @@ window.onload = function ()
 			{
 				result = result +
 					'<tr class = "full-msg">' +
-						'<td>' + data[i].M_subject + '</td>' +
+						'<td>' + data[i].T_subject + '</td>' +
 						'<td>' + data[i].T_name + '</td>' +
 						'<td>' + data[i].T_department + '</td>' + 
 						'<td>' + data[i].T_deadline + '</td>' + 
@@ -87,6 +90,16 @@ window.onload = function ()
 		var det = document.getElementsByClassName("detail");
 		for(var i = 0; i < det.length; i++)
 			det[i].onclick = function() {Detail(this.id)};
+	}
+	function ViewNumChange()
+	{
+		datanum = document.getElementById("DataNum").value;
+		page_num = 1;
+		GridView();
+		if(data == "nothing")
+			PageList(1);
+		else
+			PageList(data.length);
 	}
 	function PageChange(id)
 	{

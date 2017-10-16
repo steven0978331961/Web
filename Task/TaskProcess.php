@@ -2,30 +2,30 @@
 	date_default_timezone_set("Asia/Taipei");
 	include_once('config.php');
 	
-	class taskprocess
+	class TaskProcess
 	{
-		var $M_id;
-		var $M_subject;
-		var $M_department;
-		var $M_users;
-		var $M_date;
-		var $M_recoder;
-		var $M_files;
+		var $T_subject;
+		var $T_name;
+		var $T_deadline;
+		var $T_coll;
+		var $T_status;
+		var $T_finishdate;
+		var $T_department;
 		
-		function __construct($i, $s, $dp, $u, $d, $r, $f)
+		function __construct($s, $n, $d, $c, $st, $f, $dp)
 		{
-			$this->M_id = $i;
-			$this->M_subject = $s;
-			$this->M_department = $dp;
-			$this->M_users = $u;
-			$this->M_date = $d;
-			$this->M_recoder = $r;
-			$this->M_files = $f;
+			$this->T_subject = $s;
+			$this->T_name = $n;
+			$this->T_deadline = $d;
+			$this->T_coll = $c;
+			$this->T_status = $st;
+			$this->T_finishdate = $f;
+			$this->T_department = $dp;
 		}
 	}
 	class Task extends DB
 	{
-		var $historys = array();
+		var $taskp = array();
 		function __construct()
 		{
 			parent ::__construct();
@@ -33,55 +33,82 @@
 		function FormShow()
 		{	
 			//new、search
-			$query = "SELECT `M_id`, `M_subject`, `M_department`, `M_users`, `M_date`, `M_recoder`, `M_files` FROM `Meetings` WHERE `M_status` = 0 ";
-			if(isset($_POST['s_MtName']) != '')
+			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_status`, `T_finishdate`, `T_department` ".
+					 "FROM `Taskprocess` JOIN `Meetings` ON `Taskprocess`.`T_subject` = `Meetings`.`M_subject` ";
+			$conn = "WHERE";
+			if(isset($_POST['t_MtName']) != '')
 			{
-				$query = $query."AND `M_subject` LIKE :s_MtName ";
-				$MtName = '%'.$_POST['s_MtName'].'%';
+				$query = $query.$conn."AND `T_subject` LIKE :t_MtName ";
+				$conn = "";
+				$TkName = '%'.$_POST['t_MtName'].'%';
 			}
-			if(isset($_POST['s_MtStartDate']) != '')
+			if(isset($_POST['t_MtStartDate']) != '')
 			{
-				$query = $query."AND `M_date` >= STR_TO_DATE(:s_MtStartDate, '%Y/%m/%d/') ";
+				$query = $query.$conn."AND Date(`M_date`) >= STR_TO_DATE(:t_MtStartDate, '%Y-%m-%d') ";
+				$conn = "";
 			}
-			if(isset($_POST['s_MtEndDate']) != '')
+			if(isset($_POST['t_MtEndDate']) != '')
 			{
-				$query = $query."AND `M_date` <= STR_TO_DATE(:s_MtEndDate, '%Y/%m/%d/') ";
+				$query = $query.$conn."AND Date(`M_date`) <= STR_TO_DATE(:t_MtEndDate, '%Y-%m-%d') ";
+				$conn = "";
 			}
-			if(isset($_POST['s_MtDepart']) != '')
+			if(isset($_POST['t_TpName']) != '')
 			{
-				$query = $query."AND `M_department` = :s_MtDepart ";
+				$query = $query.$conn."AND `T_name` LIKE :t_TpName ";
+				$conn = "";
+				$TpName = '%'.$_POST['t_TpName'].'%';
 			}
-			$query = $query."ORDER BY `M_createtime` DESC ";
+			if(isset($_POST['t_TpDepartment']) != '')
+			{
+				$query = $query.$conn."AND `T_department` = :t_TpDepartment ";
+				$conn = "";
+			}
+			if(isset($_POST['t_TpStatus']) != '')
+			{
+				$query = $query.$conn."AND `T_status` = :t_TpStatus ";
+				$conn = "";
+			}	
+			$query = $query."ORDER BY `TaskProcess`.`reg_date` DESC ";
+			$var = 1;
+			$query = str_replace("WHEREAND","WHERE",$query,$var);
 			if($_POST['action'] == "new")
 				$query = $query."LIMIT 10";
 			$sth = $this->database->prepare($query);
-			if(isset($_POST['s_MtName']) != '')
+			if(isset($_POST['t_MtName']) != '')
 			{
-				$sth->bindParam(':s_MtName', $MtName, PDO::PARAM_STR);
+				$sth->bindParam(':t_MtName', $TkName, PDO::PARAM_STR);
 			}
-			if(isset($_POST['s_MtStartDate']) != '')
+			if(isset($_POST['t_MtStartDate']) != '')
 			{
-				$sth->bindParam(':s_MtStartDate', $_POST['s_MtStartDate'], PDO::PARAM_STR);
+				$sth->bindParam(':t_MtStartDate', $_POST['t_MtStartDate'], PDO::PARAM_STR);
 			}
-			if(isset($_POST['s_MtEndDate']) != '')
+			if(isset($_POST['t_MtEndDate']) != '')
 			{
-				$sth->bindParam(':s_MtEndDate', $_POST['s_MtEndDate'], PDO::PARAM_STR);
+				$sth->bindParam(':t_MtEndDate', $_POST['t_MtEndDate'], PDO::PARAM_STR);
 			}
-			if(isset($_POST['s_MtDepart']) != '')
+			if(isset($_POST['t_TpName']) != '')
 			{
-				$sth->bindParam(':s_MtDepart', $_POST['s_MtDepart'], PDO::PARAM_STR);
+				$sth->bindParam(':t_TpName', $TpName, PDO::PARAM_STR);
+			}
+			if(isset($_POST['t_TpDepartment']) != '')
+			{
+				$sth->bindParam(':t_TpDepartment', $_POST['t_TpDepartment'], PDO::PARAM_STR);
+			}
+			if(isset($_POST['t_TpStatus']) != '')
+			{
+				$sth->bindParam(':t_TpStatus', $_POST['t_TpStatus'], PDO::PARAM_INT);
 			}
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_BOTH);			
 			foreach ($result as $row) 
 			{
-				array_push($this->historys, new history($row['M_id'], $row['M_subject'], $row['M_department'], $row['M_users'],
-                           $row['M_date'], $row['M_recoder'], $row['M_files']));
+				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $row['T_coll'],
+														 $row['T_status'], $row['T_finishdate'], $row['T_department']));
 			}
 			if(count($result) == 0)
 				echo json_encode("nothing");
 			else
-				echo json_encode($this->historys);
+				echo json_encode($this->taskp);
 		}
 		function Del()
 		{
@@ -100,23 +127,9 @@
 			else
 				echo json_encode("DeleteFail");
 		}
-		function Detail()
-		{
-			$query = "SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`, `M_recoder`, `M_files`, `M_status`, ".
-			         "`T_name`, `T_department`, `T_dateline`, `T_coll`, `T_status`, `T_finishdate` ".
-					 "FROM `Meetings` LEFT JOIN `Taskprocess` ON `Meetings`.`M_subject` = `T_subject` WHERE `M_id` = :M_id";
-			$sth = $this->database->prepare($query);
-			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
-			$sth->execute();
-			$result = $sth->fetch();
-			if($result == null)
-				echo json_encode("DetailFail");
-			else
-				echo json_encode($result);
-		}
 	}
 	$action = $_POST['action'];
-	$mb = new His();
+	$mb = new Task();
 	switch($action)
 	{
 		case "Search":
