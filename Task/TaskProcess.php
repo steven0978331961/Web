@@ -133,6 +133,32 @@
 			else
 				echo json_encode("DFSFail");
 		}
+		function Save()
+		{
+			$query = "UPDATE `TaskProcess` SET `T_deadline` = :T_deadline, `T_coll` = :T_coll, `T_department` = :T_department, `T_status` = :T_status WHERE `T_subject` = :T_subject AND `T_name` = :T_name";
+			$sth = $this->database->prepare($query);	
+			$sth->bindParam(':T_deadline', $_POST['T_deadline'], PDO::PARAM_STR);
+			$sth->bindParam(':T_coll', $_POST['T_coll'], PDO::PARAM_STR);
+			$sth->bindParam(':T_department', $_POST['T_department'], PDO::PARAM_STR);
+			$sth->bindParam(':T_status', $_POST['T_status'], PDO::PARAM_INT);
+			$sth->bindParam(':T_subject', $_POST['T_subject'], PDO::PARAM_STR);
+			$sth->bindParam(':T_name', $_POST['T_name'], PDO::PARAM_STR);
+			$sth->execute();
+			
+			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, ".
+					 '`T_status` AS "T_stat",CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status" '.
+					 "FROM `Taskprocess` JOIN `Meetings` ON `Taskprocess`.`T_subject` = `Meetings`.`M_subject` ".
+					 "WHERE `T_subject` = :T_subject AND `T_name` = :T_name";
+			$sth = $this->database->prepare($query);
+			$sth->bindParam(':T_subject', $_POST['T_subject'], PDO::PARAM_STR);
+			$sth->bindParam(':T_name', $_POST['T_name'], PDO::PARAM_STR);
+			$sth->execute();
+			$result = $sth->fetch();
+			if(count($result) == 0)
+				echo json_encode("SaveFail");
+			else
+				echo json_encode($result);
+		}
 	}
 	$action = $_POST['action'];
 	$mb = new Task();
@@ -148,19 +174,14 @@
 			$mb -> FormShow();
 			break;
 		}
-		case "Edit":
-		{
-			echo 'Edit';
-			break;
-		}
 		case "DeleleFinishStop":
 		{
 			$mb -> DFS();
 			break;
 		}
-		case "Edit":
+		case "Save":
 		{
-			$mb -> Edit();
+			$mb -> Save();
 			break;
 		}
 	}

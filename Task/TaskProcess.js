@@ -1,14 +1,11 @@
 window.onload = function ()
 {
-	//1.畫面存取─PHP取前5筆資料，寫資料進Grid
-	//2.查詢─PHP取所有資料，寫資料進Grid，寫頁數
-	//3.頁數Grid讀取
-	//4.編輯 popup window，儲存後資料更新
-	//5.刪除資料
-	//6.完成、中止資料更新
 	var data;
 	var temp;
 	var page_num = 1;
+	var t_row;
+	var t_de;
+	var t_st;
 	var datanum = document.getElementById("DataNum").value;
 	document.getElementById("DataNum").onchange = function () {ViewNumChange();};
 	document.getElementById("search").onclick = function () {FormShow("Search");};
@@ -48,12 +45,13 @@ window.onload = function ()
 		};
 		request.open("POST", "TaskProcess.php");
 		request.send(viewData);
+		t_de = document.getElementById("t_TpDepartment").value;
+		t_st = document.getElementById("t_TpStatus").value;
 	}
 	function GridView()
-	{
-		
+	{	
 		//grid資料依datanum 筆數顯示
-		if (data == "nothing")
+		if (data == "nothing" || data.length == 0)
 		{
 			result = '<tr><td colspan = 10 >查無資料</td></tr>';
 		}
@@ -183,7 +181,9 @@ window.onload = function ()
 	//Edit
 	function Edit(id)
 	{
-		temp = data[id.substring(id.indexOf("-")+1)];
+		t_row = id.substring(id.indexOf("-")+1);
+		temp = data[t_row];
+		
 	}
 	$('#myModal').on('show.bs.modal', function ()
 	{
@@ -195,13 +195,13 @@ window.onload = function ()
 		document.getElementById("t_MdStatus").value = temp.T_stat;
 	})
 	function Save()
-	{
+	{		
 		temp.clear;
 		$('#myModal').modal('hide');
 		var saveData = new FormData();
 		saveData.append("action", "Save");
 		saveData.append("T_subject", document.getElementById("t_mdSubject").innerHTML);
-		saveData.append("T_name", document.getElementById("t_Mddeadline").innerHTML);
+		saveData.append("T_name", document.getElementById("t_mdName").innerHTML);
 		saveData.append("T_deadline",document.getElementById("t_Mddeadline").value);
 		saveData.append("T_coll", document.getElementById("t_MdColl").value);
 		saveData.append("T_department", document.getElementById("t_MdDepartment").value);
@@ -211,9 +211,17 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				if(JSON.parse(request.responseText) == "SaveSuccess")
+				var r_data = JSON.parse(request.responseText);
+				if(r_data != "SaveFail")
 				{
-					data.splice(row, 1, JSON.parse(request.responseText));
+					if(t_de == r_data.T_department && t_st == r_data.T_stat)
+					{
+						data.splice(t_row, 1, r_data);
+					}
+					else
+					{
+						data.splice(t_row, 1);
+					}
 					GridView();
 					PageList(data.length);
 				}
