@@ -34,11 +34,11 @@ window.onload = function ()
 			if(request.readyState == 4 && request.status == 200)
 			{
 				data = JSON.parse(request.responseText);
-				GridView();
 				if(data == "nothing")
 					PageList(1);
 				else
 					PageList(data.length);
+				GridView();
 			}
 		};
 		request.open("POST", "History.php");
@@ -85,6 +85,10 @@ window.onload = function ()
 		var edi = document.getElementsByClassName("edit");
 		for(var i = 0; i < edi.length; i++)
 			edi[i].onclick = function() {Edit(this.id)};
+		var pa = document.getElementsByName("page");
+		for(var i = 0; i < pa.length; i++)
+			pa[i].className = "btn btn-outline-primary btn-sm page_cnt";
+		document.getElementById("Page-"+page_num).className = "btn btn-primary btn-sm page_cnt";
 	}
 	function Delete(id)
 	{
@@ -160,16 +164,16 @@ window.onload = function ()
 	{
 		datanum = document.getElementById("DataNum").value;
 		page_num = 1;
-		GridView();
 		if(data == "nothing")
 			PageList(1);
 		else
 			PageList(data.length);
+		GridView();
 	}
 	function PageChange(id)
 	{
 		page_num = parseInt(id.substring(id.indexOf("-")+1));
-		GridView();
+		GridView();	
 	}
 	function PageList(num)
 	{
@@ -179,7 +183,7 @@ window.onload = function ()
 		for (i = 0; i < j; i++)
 		{
 			btn = btn + 
-			'<li><button class = "btn btn-outline-primary btn-sm page_cnt" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
+			'<li><button class = "btn btn-outline-primary btn-sm page_cnt" name = "page" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
 		}
 		document.getElementById("pagelist").innerHTML = btn;
 		var page = document.getElementsByClassName("page_cnt");

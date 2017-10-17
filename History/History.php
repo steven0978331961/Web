@@ -33,7 +33,7 @@
 		function FormShow()
 		{	
 			//new、search
-			$query = "SELECT `M_id`, `M_subject`, `M_department`, `M_users`, `M_date`, `M_recoder`, `M_files` FROM `Meetings` WHERE `M_status` = 0 ";
+			$query = "SELECT `M_id`, `M_subject`, `M_department`, `M_users`, `M_date`, `M_recoder`, `M_files` FROM `Meetings` WHERE `M_status` = 1 ";
 			if(isset($_POST['s_MtName']) != '')
 			{
 				$query = $query."AND `M_subject` LIKE :s_MtName ";
@@ -85,12 +85,12 @@
 		}
 		function Del()
 		{
-			$query = "UPDATE `Meetings` SET `M_status` = 1 WHERE `M_id` = :M_id";
+			$query = "UPDATE `Meetings` SET `M_status` = 0 WHERE `M_id` = :M_id";
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
 			
-			$query = "SELECT COUNT(`M_id`) AS CNT FROM `Meetings` WHERE `M_id` = :M_id AND `M_status` = 1";
+			$query = "SELECT COUNT(`M_id`) AS CNT FROM `Meetings` WHERE `M_id` = :M_id AND `M_status` = 0";
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
@@ -102,9 +102,9 @@
 		}
 		function Detail()
 		{
-			$query = "SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`, `M_recoder`, `M_files`, `M_status`, ".
-			         "`T_name`, `T_department`, `T_deadline`, `T_coll`, `T_status`, `T_finishdate` ".
-					 "FROM `Meetings` LEFT JOIN `Taskprocess` ON `Meetings`.`M_subject` = `T_subject` WHERE `M_id` = :M_id";
+			$query = 'SELECT `M_subject`, `M_department`, `M_users`, `M_content`, `M_date`, `M_starttime`, `M_endtime`, `M_recoder`, `M_files`, `M_status`, '.
+			         '`T_name`, `T_department`, `T_deadline`, `T_coll`, CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status", `T_finishdate` '.
+					 'FROM `Meetings` LEFT JOIN `Taskprocess` ON `Meetings`.`M_subject` = `T_subject` WHERE `M_id` = :M_id';
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
