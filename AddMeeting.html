@@ -18,17 +18,17 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 }
 </style>
 
-<body     style=" background: url('01.jpg'); background-size: cover;" onload="Add_Plugin();"  >
+<body      onload="Add_Plugin();"  >
 
 
-
-<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"     enctype="multipart/form-data"  >
 	<div style="margin-left:450px">
-	  <a style="font-size:70px;" >會議主題:</a> <input type="text"   style="margin-left:20px width=500px"    maxlength="20" name="Subject"  value="Subject"  Id="Subject" ><br/><br/>
+<form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"     enctype="multipart/form-data"  >
+
+	  <a style="font-size:50px;height:70px" >會議主題:</a> <input type="text"   style="margin-left:20px ; height:70px"    maxlength="20" name="Subject"  value="Subject"  Id="Subject" ><br/><br/>
 	  日期:<input type="date" name="Date" value="2017-11-05" >
 	  開始時間:<input type="time" name="StartTime" value="16:05" >
 	  結束時間:<input type="time"  name="FinalTime" value="16:06"><br/> <br/>
-	  參與者:<input type="textarea"  Id=Who_Di  name="Participate" value=""  style="width: 540px"  readonly="value" > 
+	  參與者:<div Id=Who_Di  name="Participate" value=""  style="width: 540px"  readonly="value" > </div>
 	         <input type="button" value="修改與會人"   href="#" onclick="Open_ChildWindows('MeetingPeople.html');"  class="w3-btn w3-round-large"  >  <br/><br/>
 
 
@@ -45,33 +45,59 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 　             <option value="Miaoli">跨部門</option>
 
 	  	   </select>
-	  附件:<input type="file" name="file[]"  Id="file"  style="margin-left:300px" multiple="multiple" required="required" draggable="true"  ><br/><br/><br/>
+	 
+
+	 	<iframe src="FileDeal.html"  height="220px" ="" style="margin-left:250px" ></iframe><br/>
+
 
 
 
 	  <a  style="font-size:30px;"   >工作進度:</a><br/>
 	  工作名:<input type="text" name="WorkName"  Id="WorkName" value="Work" maxlength="20" > 截止時間:<input type="date" name="DateLine"             Id="DateLine" value="2017-11-08" >
-      狀態:<select  Id="State" name="State">
+
+	  <span style="display:none" >
+      狀態:<select Id="State" name="State">
 	  	       <option value="Taipei">進行</option>
 　             <option value="Taoyuan">終止</option>
 　             <option value="Hsinchu">消失</option>
 　             <option value="Miaoli">跨部門</option>
 
 	  	   </select><br/>
+	  </span>
 	  <br/>
-	  協作者:<input type="textarea"  Id=Who_Di2  name="WorkPeople"  style="width: 350px"  value="" readonly="value" >  
+	  協作者:<div  Id=Who_Di2  name="WorkPeople"  style="width: 350px"  value="" readonly="value" >  </div>
 	  <input type="button" value="修改與會人"   class="w3-btn w3-round-large"  href="#" onclick="Open_ChildWindows('MeetingPeople2.html');" > 
-	  <input type="button" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" >   <br/><br/><br/>
+	  <input type="button" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" ><br/><br/>
    
-   <textarea name="Task" id="Task" rows="10" cols="80" "  readonly="true" ></textarea><br/>  <br/>
+      <table name="Task" id="Task" border="1" width="650"  >
+      <tr>
+      	<th>
+      		Id
+      	</th>
+      	<th>
+      		項目
+      	</th>
+      	<th>
+      		日期
+      	</th>
+      	<th>
+      		合作人
+      	</th>
+      	<th   >
+      		刪除
+      	</th>
 
-      <input type="text"  Id="DeleteTaskId">   
-      <input type="button" value="刪除任務"   class="w3-btn w3-round-large"  href="#" onclick="DeleteTask()" >     
+      </tr>
 
-	    <input type="button" value="完成紀錄"   class="w3-btn w3-round-large"  onclick="Summit();"><br/><br/>
 
-</div>
+      </table><br/>  <br/>
+
+     
+
+	    <input type="button" value="完成紀錄"  style="margin-left: 800px"  class="w3-btn w3-round-large"  onclick="Summit();"><br/><br/>
+
+
 </form>
-
+</div>
 
 </body>

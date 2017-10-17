@@ -5,6 +5,7 @@ echo  "紀錄完成";
 SQLUse_Create();
 if($_POST){
 
+
 //echo $_POST["TaskArray"];
 // var_dump( json_decode($_POST["TaskArray"]));
 
@@ -87,7 +88,7 @@ move_uploaded_file($tmp_name,$location . $name ) ;
 
 function SQLUse_Create(){
  	
- 	$CreateTable1="CREATE TABLE IF NOT EXISTS Meetings6(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
+ 	$CreateTable1="CREATE TABLE IF NOT EXISTS Meetings(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
  	,M_subject VARCHAR(10)  COLLATE utf8mb4_unicode_ci  NOT NULL
  	,M_users VARCHAR(50)  COLLATE utf8mb4_unicode_ci NOT NULL
  	,M_content  Text    COLLATE utf8mb4_unicode_ci NOT NULL
