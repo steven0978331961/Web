@@ -7,11 +7,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 		
 		<!--Bootstrap用到JS：jquery、popper、bootstrap-->
-		<!--
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-		-->
 		<script type="text/javascript" src="History.js"></script>
 	</head>
 	<body>
@@ -87,6 +85,38 @@
 					</ul>
 				</div>
 				<div class = "col-md-4" ></div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="t_mdSubject"></h5>
+						<h5 class="modal-title" id="t_mdName"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+							<h5>會議主題：<span id = d_MdSubject></span></h5>
+							<h5>日期：<span id = d_MdDate></span></h5>
+							<h5>開始時間：<span id = d_MdStartTime></span></h5>
+							<h5>結束時間：<span id = d_MdEndTime></span></h5>
+							<h5>參與者：<span id = d_MdUsers></span></h5>
+							<h5>會議記錄：<span id = d_MdRecoders></span></h5>
+							<h5>部門：<span id = d_MdDepart></span></h5>
+							<h5>內容：<p id = d_MdContent></p></h5>
+							<h5>附件：<span id = d_MdFiles></span></h5>
+							<hr></hr>
+							<h5>工作進度</h3>
+							<h5>工作名稱：<span id = d_MdName></span></h5>
+							<h5>Deadline Date：<span id = d_MdDeadline></span></h5>
+							<h5>協作者：<span id = d_MdColl></span></h5>
+							<h5>狀態：<span id = d_MdStatus></span></h5>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

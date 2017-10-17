@@ -7,6 +7,7 @@ window.onload = function ()
 	//5.刪除資料
 	//6.跳頁至AddMeeting並帶入資料
 	var data;
+	var temp_id;
 	var page_num = 1;
 	var datanum = document.getElementById("DataNum").value;
 	document.getElementById("DataNum").onchange = function () {ViewNumChange();};
@@ -67,9 +68,9 @@ window.onload = function ()
 						'<td>' + data[i].M_users + '</td>' + 
 						'<td>' + data[i].M_files + '</td>' + 					
 						'<td>' +
-							'<button class="detail" type="button" id="detail-' + data[i].M_id + '">詳細資料</button>' +
-							'<button class="edit" type="button" id="edit-' + data[i].M_id + '">編輯</button>' +
-							'<button class="delete" type="button" id="delete-' + data[i].M_id + '">刪除</button>' +
+							'<button type="button" class="btn btn-success btn-sm detail" data-toggle="modal" data-target="#myModal" id="detail-' + data[i].M_id + '">詳細資料</button>' +
+							'<button type="button" class="btn btn-primary btn-sm edit"  id="edit-' + data[i].M_id + '">編輯</button>' +
+							'<button type="button" class="btn btn-danger btn-sm delete"  id="delete-' + data[i].M_id + '">刪除</button>' +
 						'</td>' +
 					'</tr>';
 			}
@@ -109,45 +110,45 @@ window.onload = function ()
 			request.send(delData);
 		}
 	}
+
 	function Detail(id)
+	{
+		temp_id = id.substring(id.indexOf("-")+1);
+		
+	}
+	$('#myModal').on('show.bs.modal', function ()
 	{
 		var detData = new FormData();
 		detData.append("action", "Detail");
-		detData.append("M_id", id.substring(id.indexOf("-")+1));
+		detData.append("M_id", temp_id);
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				var det = JSON.parse(request.responseText);
-				if(det != "DetailFail")
+				var temp = JSON.parse(request.responseText);
+				if(temp != "DetailFail")
 				{
-					var winObj = window.open('History_Detail.html','詳細資料', 'height=200,width=400,scrollbars=yes');
-					winObj.window.onload = function ()
-					{
-						winObj.document.getElementById("d_MtSubject").innerHTML  = det.M_subject;
-						winObj.document.getElementById("d_MtDate").innerHTML  = det.M_date;
-						winObj.document.getElementById("d_MtStartTime").innerHTML  = det.M_starttime;
-						winObj.document.getElementById("d_MtEndTime").innerHTML  = det.M_endtime;
-						winObj.document.getElementById("d_MtUsers").innerHTML  = det.M_users;
-						winObj.document.getElementById("d_MtRecoders").innerHTML  = det.M_recoder;
-						winObj.document.getElementById("d_MtDepart").innerHTML  = det.M_department;
-						winObj.document.getElementById("d_MtContent").innerHTML  = det.M_content;
-						winObj.document.getElementById("d_MtFiles").innerHTML  = det.M_files;
-						winObj.document.getElementById("d_TpName").innerHTML  = det.T_name;
-						winObj.document.getElementById("d_TpDeadline").innerHTML  = det.T_dateline;
-						winObj.document.getElementById("d_TpColl").innerHTML  = det.T_coll;
-						winObj.document.getElementById("d_TpStatus").innerHTML  = det.T_status;
-					}
-					
+					document.getElementById("d_MdSubject").innerHTML = temp.M_subject;
+					document.getElementById("d_MdDate").innerHTML = temp.M_date;
+					document.getElementById("d_MdStartTime").innerHTML = temp.M_starttime;
+					document.getElementById("d_MdEndTime").innerHTML = temp.M_endtime;
+					document.getElementById("d_MdUsers").innerHTML = temp.M_users;
+					document.getElementById("d_MdRecoders").innerHTML = temp.M_recoder;	
+					document.getElementById("d_MdDepart").innerHTML = temp.M_department;
+					document.getElementById("d_MdContent").innerHTML = temp.M_content;
+					document.getElementById("d_MdFiles").innerHTML = temp.M_files;
+					document.getElementById("d_MdName").innerHTML = temp.T_name;
+					document.getElementById("d_MdDeadline").innerHTML = temp.T_deadline;
+					document.getElementById("d_MdColl").innerHTML = temp.T_coll;
+					document.getElementById("d_MdStatus").innerHTML = temp.T_status;
 				}
-				else
-					alert("詳細資料讀取失敗！");
 			}
 		};
 		request.open("POST", "History.php");
 		request.send(detData);
-	}
+
+	})
 	function ViewNumChange()
 	{
 		datanum = document.getElementById("DataNum").value;
