@@ -10,16 +10,43 @@ function getID()
 	{
 		var temp = url.split("?");
 		var vars = temp[1].split("&");
-		return vars[0].substring(vars[0].indexOf("=")+1);
+		return vars[0];
 	}
 }
 function getContent(id)
 {
-	//用AJAX取得MEETING資料
-	//寫入資料
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function()
+	{
+		if(request.readyState == 4 && request.status == 200)
+		{
+			if(JSON.parse(request.responseText) != "nodata")
+			{
+				//寫入資料
+			}
+			else
+			{
+				alert("無資料可修改！");
+				document.location.href="AddMeeting.html";
+			}
+		}
+	};
+	request.open("POST", "LoadEdit.php");
+	request.send("action=getEdit&"+id);
 }
-//原有PHP存檔後CALL
 function saveEdit(id)
 {
-	//用PHP將STATUS改為0(預設1)
+	var request = new XMLHttpRequest();
+	request.onreadystatechange = function()
+	{
+		if(request.readyState == 4 && request.status == 200)
+		{
+			if(JSON.parse(request.responseText) == "RemarkFail")
+			{
+				alert("修改失敗！");
+			}
+		}
+	};
+	request.open("POST", "LoadEdit.php");
+	request.send("action=remark&"+id);
 }
