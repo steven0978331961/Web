@@ -82,6 +82,9 @@ window.onload = function ()
 		var det = document.getElementsByClassName("detail");
 		for(var i = 0; i < det.length; i++)
 			det[i].onclick = function() {Detail(this.id)};
+		var edi = document.getElementsByClassName("edit");
+		for(var i = 0; i < edi.length; i++)
+			edi[i].onclick = function() {Edit(this.id)};
 	}
 	function Delete(id)
 	{
@@ -149,6 +152,10 @@ window.onload = function ()
 		request.send(detData);
 
 	})
+	function Edit(id)
+	{
+		document.location.href="AddMeeting.html?id="+id.substring(id.indexOf("-")+1);
+	}
 	function ViewNumChange()
 	{
 		datanum = document.getElementById("DataNum").value;
