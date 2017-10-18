@@ -1,22 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<meta  charset="utf-8">
-<script type="text/javascript" src="UnitTest.js"></script>
-
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="http://www.w3ii.com/lib/w3.css">
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-
+	<meta  charset="utf-8">
+    <script type="text/javascript" src="FileDeal.js" ></script>
 </head>
 
-<body>
-     <form  action="FileDeal.php"  Id="FileDeal"  method="Post"   target="targetIfr"  enctype="multipart/form-data">
-	 附件:</a><input type="file" name="file[]"  Id="file" accept="image/png"  multiple="multiple" required="required" draggable="true" onchange="FileChange();" ><br/>
-	</form>
+ID : <input type="text" id="id" name="id" value="1" />
+<input multiple="multiple" type="file" name="file" id="file" style="display:none" onchange="fileSelected();" accept="image/jpeg,image/png"/>
+<button onclick="open_file_option();"><b>上傳檔案</b></button> 
+<br/><br/><br/> 
+<table id="show" border="1" width="600">
+<tr><td align="center">名稱</td><td align="center" width="100">大小</td><td align="center" width="100">狀態</td><td align="center" width="150">伺服器回傳訊息</td></tr>
+</table>
+</html>
 
-<iframe name="targetIfr" ></iframe> 
 
-</body>
+

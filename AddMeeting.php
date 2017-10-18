@@ -1,49 +1,54 @@
 <?php
 include_once("PODAction.php");
-echo  "紀錄完成";
 
-SQLUse_Create();
+
+
 if($_POST){
 
 
 //echo $_POST["TaskArray"];
 // var_dump( json_decode($_POST["TaskArray"]));
 
-$text = $_POST['content'];
 $location = 'C:/xampp/uploads/';
 
 
-
-SQLUse_Create();
-
-echo  $_POST["Subject"];
-
-SQLUse_insert( $_POST["Subject"]
-,$_POST["Participate"]
-,$_POST['content']
-,$_POST["Date"]
-,$_POST["StartTime"]
-,$_POST["FinalTime"]
-,"null"
-,$_FILES["file"]["name"]
-,$_POST["Department"]
-,"0" 
-,"0");
-
-
-$Sp_TaskArray=json_decode($_POST["TaskArray"]);
-foreach ($Sp_TaskArray as $key => $value) {
-   
-    
-    SQLUse_insertTask($value[0],"notknow",$value[1],$value[3] ,"0","0",$_POST["Department"]);
+if(isset($_FILES['file']['tmp_name'])!=false){
+  if(move_uploaded_file($_FILES['file']['tmp_name'],$location . iconv("UTF-8", "big5",$_FILES["file"]["name"]) ) ){
+      //print_r($_FILES["file"]["name"]) ;
+      echo "上傳成功!";
+    } 
 }
 
-foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {
+
+if(isset($_POST["Subject"])!=false){
+  SQLUse_Create();  
+  SQLUse_insert( $_POST["Subject"]
+  ,$_POST["Participate"]
+  ,$_POST['content']
+  ,$_POST["Date"]
+  ,$_POST["StartTime"]
+  ,$_POST["FinalTime"]
+  ,"null"
+  ,"No"
+  ,$_POST["Department"]
+  ,"0" 
+  ,"0");
+  echo  "紀錄完成";
+}
+
+
+if( isset($_POST["TaskArray"] )!=false ){
+  $Sp_TaskArray=json_decode($_POST["TaskArray"]);
+  foreach ($Sp_TaskArray as $key => $value) {    
+      SQLUse_insertTask($value[0],"notknow",$value[1],$value[3] ,"0",NULL,$_POST["Department"]);
+  }
+}
+/*foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {
   //  echo($_FILES['file']['tmp_name'][$Key]);
  // echo($KeyValue);
     move_uploaded_file($_FILES['file']['tmp_name'][$Key],$location . iconv("UTF-8", "big5",$_FILES["file"]["name"][$Key]) )   ;
 }
-
+*/
 
 
 
@@ -103,13 +108,13 @@ function SQLUse_Create(){
  	,reg_date TIMESTAMP
  	 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='會議紀錄' ";
 
- 	 $CreateTable2="CREATE TABLE IF NOT EXISTS TaskProcess(M_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
+ 	 $CreateTable2="CREATE TABLE IF NOT EXISTS TaskProcess(T_id  INT(5) UNSIGNED AUTO_INCREMENT PRIMARY KEY
  	,T_subject VARCHAR(10)   COLLATE utf8mb4_unicode_ci NOT NULL
  	,T_name VARCHAR(50)   COLLATE utf8mb4_unicode_ci NOT NULL
- 	,T_dateline  DATE NOT NULL
+ 	,T_deadline  DATE NOT NULL
  	,T_coll  VARCHAR(50)    COLLATE utf8mb4_unicode_ci NOT NULL  COMMENT '協作者'
  	,T_status INT(4) NOT NULL
- 	,T_finishdate  DATE NOT NULL
+ 	,T_finishdate  DATE 
  	,T_department VARCHAR(50)NOT NULL
 
  	,reg_date TIMESTAMP
@@ -169,7 +174,7 @@ function SQLUse_insert($M_subject
 
 function SQLUse_insertTask($T_subject
 ,$T_name 
-,$T_dateline
+,$T_deadline
 ,$T_coll 
 ,$T_status
 ,$T_finishdate
@@ -186,11 +191,11 @@ try{
        $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
        $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $Insert= $Connect->prepare("INSERT INTO taskprocess(T_subject,T_name,T_dateline,T_coll,T_status,T_finishdate,T_department)
-          Values(:T_subject,:T_name,:T_dateline,:T_coll,:T_status,:T_finishdate,:T_department )" );
+        $Insert= $Connect->prepare("INSERT INTO taskprocess(T_subject,T_name,T_deadline,T_coll,T_status,T_finishdate,T_department)
+          Values(:T_subject,:T_name,:T_deadline,:T_coll,:T_status,:T_finishdate,:T_department )" );
         $Insert->bindParam(":T_subject",$T_subject);      
         $Insert->bindParam(":T_name",$T_name);      
-        $Insert->bindParam(":T_dateline",$T_dateline);
+        $Insert->bindParam(":T_deadline",$T_deadline);
         $ST_coll= serialize($T_coll) ;
         $Insert->bindParam(":T_coll",$ST_coll);
         $Insert->bindParam(":T_status",$T_status);
