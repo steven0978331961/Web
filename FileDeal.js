@@ -11,10 +11,19 @@ function open_file_option() {
 document.getElementById("file").click();
 }
 
+function Send_FileName(File_Name){
+	
+  for(var i=0;i<File_Name.length;i++){
+   window.parent.File_Name.push(File_Name[i].name);
+   	}
+
+  
+}
+
 // 檔案選擇好之後，會呼叫這個方法
 function fileSelected() {
 if (checkFilePass()) { // 檢查每一個檔案格式、大小...確認沒問題，才可以上傳
-uploadFile();
+    uploadFile();
 }
 }
 
@@ -79,6 +88,11 @@ function uploadComplete(evt) {
     var files = document.getElementById('file').files;
     if ((i++) < files.length) {
         upload(); // 遞迴呼叫 upload()，會等待上一個檔案下載好之後，才會下載另一個檔案
+    } 
+    if(i==files.length){
+
+    	Send_FileName(files);
+
     }
 }
 

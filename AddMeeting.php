@@ -15,12 +15,17 @@ $location = 'C:/xampp/uploads/';
 if(isset($_FILES['file']['tmp_name'])!=false){
   if(move_uploaded_file($_FILES['file']['tmp_name'],$location . iconv("UTF-8", "big5",$_FILES["file"]["name"]) ) ){
       //print_r($_FILES["file"]["name"]) ;
-      echo "上傳成功!";
+      global $File_Name;
+      $File_Name= $_FILES["file"]["name"]; 
+      echo "上傳成功";
+    
     } 
 }
 
 
 if(isset($_POST["Subject"])!=false){
+  global $File_Name;
+  echo $File_Name;
   SQLUse_Create();  
   SQLUse_insert( $_POST["Subject"]
   ,$_POST["Participate"]
@@ -29,7 +34,7 @@ if(isset($_POST["Subject"])!=false){
   ,$_POST["StartTime"]
   ,$_POST["FinalTime"]
   ,"null"
-  ,"No"
+  ,$_POST["FileName"]
   ,$_POST["Department"]
   ,"0" 
   ,"0");

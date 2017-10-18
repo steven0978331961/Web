@@ -1,7 +1,8 @@
 
 var Store_MeetingPelple=[];
 var Store_HelperPoeple=[];
-
+var File_Name=[];
+var File_Name_Array=[];
 TaskArray= new Array();
 document.write("<script src='ckeditor/ckeditor.js'></script>");
 //document.write("<script src='https://cdn.ckeditor.com/ckeditor5/1.0.0-alpha.1/inline/ckeditor.js'></script>");
@@ -125,8 +126,11 @@ if(checkNull()==true){
     temp.appendChild(opt2);
 
 
-
-
+    var opt3 = document.createElement("textarea");
+    opt3.name = "FileName";
+    opt3.value=JSON.stringify(File_Name);
+    temp.appendChild(opt3);
+ 
 
 
 
