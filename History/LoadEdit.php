@@ -14,7 +14,19 @@
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['id'], PDO::PARAM_INT);
 			$sth->execute();
-			$result = $sth->fetch();
+			$result = $sth->fetchAll(PDO::FETCH_BOTH);
+			$arr = array();
+			$M_users = array();	
+			$M_content = array();
+			$M_files = array();
+			foreach ($result as $row) 
+			{
+				$M_users = unserialize($row['M_users']);
+				$M_content = unserialize($row['M_content']);
+				$M_files = unserialize($row['M_files']);
+				array_push($arr, $row['M_subject'], $row['M_department'], $M_users, $M_content, $row['M_date'], $row['M_starttime'], $row['M_endtime'],
+								 $row['M_recoder'], $M_files, $row['T_name'], $row['T_department'], $row['T_deadline'], $row['T_coll'], $row['T_status'], $row['T_finishdate']);
+			}
 			if(count($result) == 0)
 				echo "nodata";
 			else

@@ -25,6 +25,7 @@ function getContent(id)
 			var data = JSON.parse(request.responseText);
 			if(data != "nodata")
 			{
+				console.log(data.M_users);
 				//寫入資料
 				document.getElementById("Subject").value = data.M_subject;
 				document.getElementsByName("Date")[0].value = data.M_date;
