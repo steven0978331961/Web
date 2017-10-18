@@ -1,7 +1,8 @@
 function LoadContent()
 {
 	var id = getID();
-	getContent(id);
+	if(id != false)
+		getContent(id);
 }
 function getID()
 {
@@ -12,6 +13,7 @@ function getID()
 		var vars = temp[1].split("&");
 		return vars[0];
 	}
+	return false;
 }
 function getContent(id)
 {
