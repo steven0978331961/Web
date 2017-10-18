@@ -122,8 +122,17 @@ if(checkNull()==true){
 
     var opt2 = document.createElement("textarea");
     opt2.name = "Participate";
-    opt2.value=JSON.stringify(Store_MeetingPelple);
+
+    var NewArray=[];
+    for(i=0;i< Store_MeetingPelple.length;i++){
+        if(Store_MeetingPelple[i].checked==true){
+		     NewArray.push(MeetingPeople[i].id);
+	    }	
+	}
+
+    opt2.value=JSON.stringify(NewArray);
     temp.appendChild(opt2);
+  
 
 
     var opt3 = document.createElement("textarea");
