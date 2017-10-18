@@ -12,8 +12,9 @@
 		var $T_status;
 		var $T_finishdate;
 		var $T_department;
+		var $M_recoder;
 		
-		function __construct($s, $n, $d, $c, $stat, $st, $f, $dp)
+		function __construct($s, $n, $d, $c, $stat, $st, $f, $dp, $M_r)
 		{
 			$this->T_subject = $s;
 			$this->T_name = $n;
@@ -23,6 +24,7 @@
 			$this->T_status = $st;
 			$this->T_finishdate = $f;
 			$this->T_department = $dp;
+			$this->M_recoder = $M_r;
 		}
 	}
 	class Task extends DB
@@ -34,7 +36,7 @@
 		}
 		function FormShow()
 		{	
-			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, ".
+			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, M_recoder, ".
 					 '`T_status` AS "T_stat",CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status" '.
 					 "FROM `Taskprocess` JOIN `Meetings` ON `Taskprocess`.`T_subject` = `Meetings`.`M_subject` ";
 			$conn = "WHERE";
@@ -104,8 +106,8 @@
 			$result = $sth->fetchAll(PDO::FETCH_BOTH);			
 			foreach ($result as $row) 
 			{
-				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $row['T_coll'],
-														 $row['T_stat'], $row['T_status'], $row['T_finishdate'], $row['T_department']));
+				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $row['T_coll'], $row['T_stat'], $row['T_status'],
+														 $row['T_finishdate'], $row['T_department'], $row['M_recoder']));
 			}
 			if(count($result) == 0)
 				echo json_encode("nothing");
@@ -145,7 +147,7 @@
 			$sth->bindParam(':T_name', $_POST['T_name'], PDO::PARAM_STR);
 			$sth->execute();
 			
-			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, ".
+			$query = "SELECT `T_subject`, `T_name`, `T_deadline`, `T_coll`, `T_finishdate`, `T_department`, M_recoder, ".
 					 '`T_status` AS "T_stat",CASE `T_status` WHEN 0 THEN "進行中" WHEN 1 THEN "完成" WHEN 2 THEN "中止" WHEN 3 THEN "刪除" END AS "T_status" '.
 					 "FROM `Taskprocess` JOIN `Meetings` ON `Taskprocess`.`T_subject` = `Meetings`.`M_subject` ".
 					 "WHERE `T_subject` = :T_subject AND `T_name` = :T_name";

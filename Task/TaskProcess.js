@@ -1,5 +1,6 @@
 window.onload = function ()
 {
+	var role = "test";
 	var data;
 	var temp;
 	var page_num = 1;
@@ -62,8 +63,14 @@ window.onload = function ()
 			if ((data.length - i) < datanum)
 				j = data.length;
 			var result = "";
+			var delay = "";
 			for(;i < j; i++)
 			{
+				var today = new Date();
+				if(Date.parse(data[i].T_deadline).valueOf() < Date.parse(today).valueOf() && (data[i].T_stat == 0 || data[i].T_stat == 1) && (data[i].T_finishdate == null || Date.parse(data[i].T_finishdate).valueOf() > Date.parse(data[i].T_deadline).valueOf()))
+					delay = "(逾期)";
+				else
+					delay = "";
 				result = result +
 					'<tr class = "full-msg" id = "row-' + i + '">' +
 						'<td>' + data[i].T_subject + '</td>' +
@@ -71,14 +78,28 @@ window.onload = function ()
 						'<td>' + data[i].T_department + '</td>' + 
 						'<td>' + data[i].T_deadline + '</td>' + 
 						'<td>' + data[i].T_coll + '</td>' + 
-						'<td>' + data[i].T_status + '</td>' +						
-						'<td>' +
-							'<button type="button" class="btn btn-primary btn-sm edit" data-toggle="modal" data-target="#myModal" id = "edit-' + i + '">編輯</button>' +
-							'<button type="button" class="btn btn-danger btn-sm delete"  id = "delete-' + i + '">刪除</button>' +
-							'<button type="button" class="btn btn-success btn-sm finish"  id = "finish-' + i + '">完成</button>' +
-							'<button type="button" class="btn btn-warning btn-sm stop"  id = "stop-' + i + '">中止</button>' +
-						'</td>' +
-					'</tr>';
+						'<td>' + data[i].T_status + delay + '</td>' +						
+						'<td>' ;
+				if(role == data[i].M_recoder)
+				{
+					result = result + '<button type="button" class="btn btn-primary btn-sm edit" data-toggle="modal" data-target="#myModal" id = "edit-' + i + '">編輯</button>' ;
+					if(data[i].T_stat != 3)
+					{
+						result = result + '<button type="button" class="btn btn-danger btn-sm delete"  id = "delete-' + i + '">刪除</button>' ;
+					}
+				}
+				if(data[i].T_coll.indexOf(role) > -1)
+				{
+					if(data[i].T_stat != 1)
+					{
+						result = result + '<button type="button" class="btn btn-success btn-sm finish"  id = "finish-' + i + '">完成</button>' ;
+					}
+					if(data[i].T_stat != 2)
+					{
+						result = result + '<button type="button" class="btn btn-warning btn-sm stop"  id = "stop-' + i + '">中止</button>' ;
+					}
+				}
+				result = result + '</td>' + '</tr>';
 			}
 		}
 		document.getElementById("result").innerHTML = result;
@@ -168,7 +189,6 @@ window.onload = function ()
 	}
 	function PageList(num)
 	{
-		//頁數顯示
 		var j = Math.ceil(num/datanum);
 		var btn = "";
 		for (i = 0; i < j; i++)

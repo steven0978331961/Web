@@ -1,11 +1,6 @@
 window.onload = function ()
 {
-	//1.畫面存取─PHP取前5筆資料，寫資料進Grid，寫頁數
-	//2.查詢─PHP取所有資料，寫資料進Grid，寫頁數
-	//3.頁數Grid讀取
-	//4.Detail popup window
-	//5.刪除資料
-	//6.跳頁至AddMeeting並帶入資料
+	var role = "test";
 	var data;
 	var temp_id;
 	var page_num = 1;
@@ -67,12 +62,18 @@ window.onload = function ()
 						'<td>' + data[i].M_department + '</td>' + 
 						'<td>' + data[i].M_users + '</td>' + 
 						'<td>' + data[i].M_files + '</td>' + 					
-						'<td>' +
-							'<button type="button" class="btn btn-success btn-sm detail" data-toggle="modal" data-target="#myModal" id="detail-' + data[i].M_id + '">詳細資料</button>' +
+						'<td>' ;
+				if(data[i].M_users.indexOf(role) > -1)
+				{
+					result = result + '<button type="button" class="btn btn-success btn-sm detail" data-toggle="modal" data-target="#myModal" id="detail-' + data[i].M_id + '">詳細資料</button>' ;
+				}
+				if(role == data[i].M_recoder)
+				{
+					result = result +
 							'<button type="button" class="btn btn-primary btn-sm edit"  id="edit-' + data[i].M_id + '">編輯</button>' +
-							'<button type="button" class="btn btn-danger btn-sm delete"  id="delete-' + data[i].M_id + '">刪除</button>' +
-						'</td>' +
-					'</tr>';
+							'<button type="button" class="btn btn-danger btn-sm delete"  id="delete-' + data[i].M_id + '">刪除</button>' ;
+				}
+				result = result + '</td>' + '</tr>';
 			}
 		}
 		document.getElementById("result").innerHTML = result;
@@ -133,22 +134,34 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
+				
 				var temp = JSON.parse(request.responseText);
+				console.log(temp);
 				if(temp != "DetailFail")
 				{
-					document.getElementById("d_MdSubject").innerHTML = temp.M_subject;
-					document.getElementById("d_MdDate").innerHTML = temp.M_date;
-					document.getElementById("d_MdStartTime").innerHTML = temp.M_starttime;
-					document.getElementById("d_MdEndTime").innerHTML = temp.M_endtime;
-					document.getElementById("d_MdUsers").innerHTML = temp.M_users;
-					document.getElementById("d_MdRecoders").innerHTML = temp.M_recoder;	
-					document.getElementById("d_MdDepart").innerHTML = temp.M_department;
-					document.getElementById("d_MdContent").innerHTML = temp.M_content;
-					document.getElementById("d_MdFiles").innerHTML = temp.M_files;
-					document.getElementById("d_MdName").innerHTML = temp.T_name;
-					document.getElementById("d_MdDeadline").innerHTML = temp.T_deadline;
-					document.getElementById("d_MdColl").innerHTML = temp.T_coll;
-					document.getElementById("d_MdStatus").innerHTML = temp.T_status;
+					document.getElementById("d_MdSubject").innerHTML = temp[0].M_subject;
+					document.getElementById("d_MdDate").innerHTML = temp[0].M_date;
+					document.getElementById("d_MdStartTime").innerHTML = temp[0].M_starttime;
+					document.getElementById("d_MdEndTime").innerHTML = temp[0].M_endtime;
+					document.getElementById("d_MdUsers").innerHTML = temp[0].M_users;
+					document.getElementById("d_MdRecoders").innerHTML = temp[0].M_recoder;	
+					document.getElementById("d_MdDepart").innerHTML = temp[0].M_department;
+					document.getElementById("d_MdContent").innerHTML = temp[0].M_content;
+					document.getElementById("d_MdFiles").innerHTML = temp[0].M_files;
+					if(temp[0].T_name != null)
+					{
+						var result = "";
+						for(var i = 0; i < temp.length; i++)
+						{
+							result = result + '<hr></hr>' +			
+											  '<h5>工作進度</h3>' +
+											  '<h5>工作名稱：' + temp[i].T_name + '</h5>' +
+											  '<h5>Deadline Date：' + temp[i].T_deadline + '</h5>' +
+											  '<h5>協作者：' + temp[i].T_coll + '</h5>' +
+											  '<h5>狀態：' + temp[i].T_status + '</h5>';
+						}
+						document.getElementById("task").innerHTML = result;
+					}
 				}
 			}
 		};
@@ -177,7 +190,6 @@ window.onload = function ()
 	}
 	function PageList(num)
 	{
-		//頁數顯示
 		var j = Math.ceil(num/datanum);
 		var btn = "";
 		for (i = 0; i < j; i++)
