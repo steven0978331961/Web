@@ -71,11 +71,15 @@
 				$sth->bindParam(':s_MtDepart', $_POST['s_MtDepart'], PDO::PARAM_STR);
 			}
 			$sth->execute();
-			$result = $sth->fetchAll(PDO::FETCH_BOTH);			
+			$result = $sth->fetchAll(PDO::FETCH_BOTH);
+			$M_users = array();
+			$M_files = array();
 			foreach ($result as $row) 
 			{
-				array_push($this->historys, new history($row['M_id'], $row['M_subject'], $row['M_department'], $row['M_users'],
-                           $row['M_date'], $row['M_recoder'], $row['M_files']));
+				$M_suers = unserialize($row['M_users']);
+				$M_files = unserialize($row['M_files']);
+				array_push($this->historys, new history($row['M_id'], $row['M_subject'], $row['M_department'], $M_suers,
+                           $row['M_date'], $row['M_recoder'], $M_files));
 			}
 			if(count($result) == 0)
 				echo json_encode("nothing");

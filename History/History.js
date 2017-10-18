@@ -49,6 +49,8 @@ window.onload = function ()
 		}
 		else
 		{
+			var taaa = JSON.parse(data[0].M_files);
+			console.log(taaa);
 			var j = page_num*datanum;
 			var i = (page_num-1)*datanum;
 			if ((data.length - i) < datanum)

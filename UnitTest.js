@@ -124,6 +124,7 @@ if(checkNull()==true){
     opt2.name = "Participate";
     opt2.value=JSON.stringify(Store_MeetingPelple);
     temp.appendChild(opt2);
+    console.log(opt2.value);
 
 
     var opt3 = document.createElement("textarea");
@@ -135,8 +136,8 @@ if(checkNull()==true){
 
 
 
-	var data =CKEDITOR.instances.content.getData();
-	document.getElementById("AddMeeting").submit();
+	//var data =CKEDITOR.instances.content.getData();
+	//document.getElementById("AddMeeting").submit();
 }
 	//alert(document.getElementById("Content").innerHTML );
 
