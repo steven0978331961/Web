@@ -31,7 +31,7 @@ function getContent(id)
 				document.getElementById("Who_Di").value = data.M_users;
 				document.getElementById("content").value = data.M_content;
 				document.getElementsByName("Department")[0].value = data.M_department;
-				document.getElementById("file").innerHTML = data.M_files;
+				//document.getElementById("file").innerHTML = data.M_files;
 				document.getElementById("WorkName").value = data.T_name;
 				document.getElementsByName("DateLine")[0].value = data.T_deadline;
 				document.getElementById("State").value = data.T_status;

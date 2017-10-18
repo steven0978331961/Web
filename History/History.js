@@ -28,6 +28,7 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
+				console.log(request.responseText);
 				data = JSON.parse(request.responseText);
 				if(data == "nothing")
 					PageList(1);
