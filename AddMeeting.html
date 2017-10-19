@@ -14,14 +14,16 @@
 
 <style>
 html , body ,button {
+
 font-family: "Comic Sans MS", cursive, sans-serif;
 }
 </style>
 
-<body      onload="Add_Plugin();"  >
+<body   style="width: 600px;
+  margin: 0 auto; "   onload="Add_Plugin();"  >
 
 
-	<div style="margin-left:550px">
+	<div  text-align: center>
 <form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"     enctype="multipart/form-data"  >
 
 	  <a style="font-size:50px;height:70px" >會議主題:</a> <input type="text"   style="margin-left:20px ; height:70px"    maxlength="20" name="Subject"  value="Subject"  Id="Subject" ><br/><br/>
@@ -39,10 +41,10 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 
 
 	  部門: <select name="Department"  >
-	  	       <option value="Taipei"  checked=true >電商</option>
-　             <option value="Taoyuan">資訊</option>
-　             <option value="Hsinchu">編輯</option>
-　             <option value="Miaoli">跨部門</option>
+	  	       <option value="電商"  checked=true >電商</option>
+　             <option value="資訊">資訊</option>
+　             <option value="編輯">編輯</option>
+　             <option value="跨部門">跨部門</option>
 
 	  	   </select><br/>
 

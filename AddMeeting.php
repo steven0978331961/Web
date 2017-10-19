@@ -9,7 +9,7 @@ if($_POST){
 //echo $_POST["TaskArray"];
 // var_dump( json_decode($_POST["TaskArray"]));
 
-$location = 'C:/xampp/uploads/';
+$location = 'C:/xampp/htdocs/uploads/';
 
 
 if(isset($_FILES['file']['tmp_name'])!=false){
@@ -45,7 +45,8 @@ if(isset($_POST["Subject"])!=false){
 if( isset($_POST["TaskArray"] )!=false ){
   $Sp_TaskArray=json_decode($_POST["TaskArray"]);
   foreach ($Sp_TaskArray as $key => $value) {    
-      SQLUse_insertTask($value[0],"notknow",$value[1],$value[3] ,"0",NULL,$_POST["Department"]);
+
+      SQLUse_insertTask($value[0],"notknow",$value[1],$value[3] ,"1",NULL,$_POST["Department"]);
   }
 }
 /*foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {
@@ -120,10 +121,10 @@ function SQLUse_Create(){
  	,T_coll  VARCHAR(50)    COLLATE utf8mb4_unicode_ci NOT NULL  COMMENT '協作者'
  	,T_status INT(4) NOT NULL
  	,T_finishdate  DATE 
- 	,T_department VARCHAR(50)NOT NULL
+ 	,T_department VARCHAR(20)   COLLATE utf8mb4_unicode_ci NOT NULL
 
  	,reg_date TIMESTAMP
- 	 )";
+ 	 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任務紀錄'  ";
 
  $a= new PODAction();
  $a->Creat_Table( $CreateTable1);
@@ -195,6 +196,8 @@ function SQLUse_insertTask($T_subject
 try{
        $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
        $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       $Connect->exec("set names utf8");
+      
 
         $Insert= $Connect->prepare("INSERT INTO taskprocess(T_subject,T_name,T_deadline,T_coll,T_status,T_finishdate,T_department)
           Values(:T_subject,:T_name,:T_deadline,:T_coll,:T_status,:T_finishdate,:T_department )" );

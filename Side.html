@@ -8,14 +8,20 @@
 <body  >
 	<div  style="margin-left:60px"">
 	<button type="button"   class="w3-btn w3-xlarge w3-round-xxlarge"  onclick="GoAddMeetin();">新增會議</button><br/><br/>
-	<button type="button"   class="w3-btn w3-xlarge w3-round-xxlarge">歷史紀錄</button><br/><br/>
-	<button type="button"   class="w3-btn w3-xlarge w3-round-xxlarge">任務</button><br/><br/>
+	<button type="button"   class="w3-btn w3-xlarge w3-round-xxlarge" onclick="GoHistory();">歷史紀錄</button><br/><br/>
+	<button type="button"   class="w3-btn w3-xlarge w3-round-xxlarge" onclick="GoTaskprocess();">任務</button><br/><br/>
 	<button type="button"   class="w3-btn w3-xlarge w3-round-xxlarge">登出</button><br/><br/>
     </div>
 	
     <script type="text/javascript">
 	function GoAddMeetin(){
 		parent.document.getElementById("Right").src="addmeeting.html";
+	}
+	function GoHistory(){
+		parent.document.getElementById("Right").src="History.html";
+	}
+	function GoTaskprocess(){
+		parent.document.getElementById("Right").src="Taskprocess.html";
 	}
 
     </script>
