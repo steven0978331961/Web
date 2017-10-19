@@ -37,7 +37,7 @@ if(isset($_POST["Subject"])!=false){
   ,$_POST["FileName"]
   ,$_POST["Department"]
   ,"0" 
-  ,"0");
+  ,"1");
   echo  "紀錄完成";
 }
 
@@ -46,7 +46,7 @@ if( isset($_POST["TaskArray"] )!=false ){
   $Sp_TaskArray=json_decode($_POST["TaskArray"]);
   foreach ($Sp_TaskArray as $key => $value) {    
 
-      SQLUse_insertTask($value[0],"notknow",$value[1],$value[3] ,"1",NULL,$_POST["Department"]);
+      SQLUse_insertTask($_POST["Subject"],$value[0],$value[1],$value[3] ,"0",NULL,$_POST["Department"]);
   }
 }
 /*foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {
