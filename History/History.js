@@ -188,7 +188,7 @@ window.onload = function ()
 					{
 						if(k > 0)
 							files = files + ",";
-						files = files + M_files[k];
+						files = files +"<a href='uploads/" +M_files[k]+"'>"+M_files[k]+"</a>";
 					}
 					document.getElementById("d_MdSubject").innerHTML = temp[0].M_subject;
 					document.getElementById("d_MdDate").innerHTML = temp[0].M_date;

@@ -9,7 +9,7 @@ if($_POST){
 //echo $_POST["TaskArray"];
 // var_dump( json_decode($_POST["TaskArray"]));
 
-$location = 'C:/xampp/uploads/';
+$location = 'C:/xampp/htdocs/uploads/';
 
 
 if(isset($_FILES['file']['tmp_name'])!=false){

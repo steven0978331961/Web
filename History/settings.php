@@ -5,11 +5,11 @@
 		
 		function __construct()
 		{
-			$this->host = $settings['db']['host'] = '127.0.0.1';
+			$this->host = $settings['db']['host'] = '192.168.56.1';
 			$this->port = $settings['db']['port'] = '3306';
-			$this->name = $settings['db']['name'] = 'update';
+			$this->name = $settings['db']['name'] = 'test';
 			$this->username = $settings['db']['username'] = 'root';
-			$this->password = $settings['db']['password'] = '';
+			$this->password = $settings['db']['password'] = '0000';
 			$this->charset = $settings['db']['charset'] = 'utf8';
 		}
 	}
