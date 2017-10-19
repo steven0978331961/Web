@@ -25,20 +25,31 @@ function getContent(id)
 			var data = JSON.parse(request.responseText);
 			if(data != "nodata")
 			{
+				var M_users = JSON.parse(data[0].M_users);
+				var users = "";
+				for(var k = 0; k < M_users.length; k++)
+				{
+					if(k > 0)
+						users = users + "; ";
+					users = users + M_users[k];
+				}
 				//寫入資料
-				document.getElementById("Subject").value = data.M_subject;
-				document.getElementsByName("Date")[0].value = data.M_date;
-				document.getElementsByName("StartTime")[0].value = data.M_starttime;
-				document.getElementsByName("FinalTime")[0].value = data.M_endtime;
-				document.getElementById("Who_Di").value = data.M_users;
-				document.getElementById("content").value = data.M_content;
+				document.getElementById("Subject").value = data[0].M_subject;
+				document.getElementsByName("Date")[0].value = data[0].M_date;
+				document.getElementsByName("StartTime")[0].value = data[0].M_starttime;
+				document.getElementsByName("FinalTime")[0].value = data[0].M_endtime;
+				document.getElementById("Who_Di").innerHTML = users;
+				document.getElementById("content").value = data[0].M_content;
 				document.getElementsByName("Department")[0].value = data.M_department;
 				//document.getElementById("file").innerHTML = data.M_files;
-				document.getElementById("WorkName").value = data.T_name;
-				document.getElementsByName("DateLine")[0].value = data.T_deadline;
-				document.getElementById("State").value = data.T_status;
-				document.getElementById("Who_Di2").value = data.T_coll;
-				document.getElementById("Subject").value = data.M_subject;
+				for(var i = 0; i< data.length; i++)
+				{
+					document.getElementById("WorkName").value = data[i].T_name;
+					document.getElementsByName("DateLine")[0].value = data[i].T_deadline;
+					document.getElementById("State").value = data[i].T_status;
+					document.getElementById("Who_Di2").innerHTML = data[i].T_coll;
+					document.getElementById("dealtask").click();
+				}
 			}
 			else
 			{
@@ -51,19 +62,23 @@ function getContent(id)
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");
 	request.send("action=getEdit&"+id);
 }
-function saveEdit(id)
+function saveEdit()
 {
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function()
+	var id = getID();
+	if(id != false)
 	{
-		if(request.readyState == 4 && request.status == 200)
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function()
 		{
-			if(JSON.parse(request.responseText) == "RemarkFail")
+			if(request.readyState == 4 && request.status == 200)
 			{
-				alert("修改失敗！");
+				if(JSON.parse(request.responseText) == "RemarkFail")
+				{
+					alert("修改失敗！");
+				}
 			}
-		}
-	};
-	request.open("POST", "LoadEdit.php");
-	request.send("action=remark&"+id);
+		};
+		request.open("POST", "LoadEdit.php");
+		request.send("action=remark&"+id);
+	}
 }

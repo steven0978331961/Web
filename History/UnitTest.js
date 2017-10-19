@@ -4,6 +4,7 @@ var Store_HelperPoeple=[];
 var File_Name=[];
 var File_Name_Array=[];
 TaskArray= new Array();
+document.write("<script src='LoadEdit.js'></script>");
 document.write("<script src='ckeditor/ckeditor.js'></script>");
 //document.write("<script src='https://cdn.ckeditor.com/ckeditor5/1.0.0-alpha.1/inline/ckeditor.js'></script>");
 

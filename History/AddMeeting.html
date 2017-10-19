@@ -18,7 +18,7 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 }
 </style>
 
-<body      onload="Add_Plugin();"  >
+<body      onload="Add_Plugin(); LoadContent();"  >
 
 
 	<div style="margin-left:550px">
@@ -70,7 +70,7 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 	  <br/>
 	  協作者:<div  Id=Who_Di2  name="WorkPeople"  style="width: 350px"  value="" readonly="value" >  </div>
 	  <input type="button" value="修改與會人"   class="w3-btn w3-round-large"  href="#" onclick="Open_ChildWindows('MeetingPeople2.html');" > 
-	  <input type="button" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" ><br/><br/>
+	  <input type="button" id = "dealtask" value="新增任務"   class="w3-btn w3-round-large"  href="#" onclick="DealTask()" ><br/><br/>
    
       <table name="Task" id="Task" border="1" width="650"  >
       <tr>
@@ -97,7 +97,7 @@ font-family: "Comic Sans MS", cursive, sans-serif;
 
      
 
-	    <input type="button" value="完成紀錄"  style="margin-left: 800px"  class="w3-btn w3-round-large"  onclick="Summit();"><br/><br/>
+	    <input type="button" value="完成紀錄"  style="margin-left: 800px"  class="w3-btn w3-round-large"  onclick="Summit(); saveEdit();"><br/><br/>
 
 
 </form>

@@ -1,6 +1,6 @@
 <?php
 	date_default_timezone_set("Asia/Taipei");
-	include_once('config.php');
+	include_once('configs.php');
 	
 	class TaskProcess
 	{
@@ -103,11 +103,13 @@
 				$sth->bindParam(':t_TpStatus', $_POST['t_TpStatus'], PDO::PARAM_INT);
 			}
 			$sth->execute();
-			$result = $sth->fetchAll(PDO::FETCH_BOTH);			
+			$result = $sth->fetchAll(PDO::FETCH_BOTH);
+			$T_coll = array();			
 			foreach ($result as $row) 
 			{
-				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $row['T_coll'], $row['T_stat'], $row['T_status'],
-														 $row['T_finishdate'], $row['T_department'], $row['M_recoder']));
+				$T_coll = unserialize($row['T_coll']);
+				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $T_coll, $row['T_stat'],
+					$row['T_status'], $row['T_finishdate'], $row['T_department'], $row['M_recoder']));
 			}
 			if(count($result) == 0)
 				echo json_encode("nothing");
@@ -137,10 +139,11 @@
 		}
 		function Save()
 		{
+			$Tmp_coll = serialize($_POST['T_coll']);
 			$query = "UPDATE `TaskProcess` SET `T_deadline` = :T_deadline, `T_coll` = :T_coll, `T_department` = :T_department, `T_status` = :T_status WHERE `T_subject` = :T_subject AND `T_name` = :T_name";
 			$sth = $this->database->prepare($query);	
 			$sth->bindParam(':T_deadline', $_POST['T_deadline'], PDO::PARAM_STR);
-			$sth->bindParam(':T_coll', $_POST['T_coll'], PDO::PARAM_STR);
+			$sth->bindParam(':T_coll', $Tmp_coll, PDO::PARAM_STR);
 			$sth->bindParam(':T_department', $_POST['T_department'], PDO::PARAM_STR);
 			$sth->bindParam(':T_status', $_POST['T_status'], PDO::PARAM_INT);
 			$sth->bindParam(':T_subject', $_POST['T_subject'], PDO::PARAM_STR);
@@ -155,11 +158,18 @@
 			$sth->bindParam(':T_subject', $_POST['T_subject'], PDO::PARAM_STR);
 			$sth->bindParam(':T_name', $_POST['T_name'], PDO::PARAM_STR);
 			$sth->execute();
-			$result = $sth->fetch();
+			$result = $sth->fetchAll(PDO::FETCH_BOTH);
+			$T_coll = array();		
+			foreach ($result as $row) 
+			{
+				$T_coll = unserialize($row['T_coll']);
+				array_push($this->taskp, new TaskProcess($row['T_subject'], $row['T_name'], $row['T_deadline'], $T_coll, $row['T_stat'],
+					$row['T_status'], $row['T_finishdate'], $row['T_department'], $row['M_recoder']));
+			}
 			if(count($result) == 0)
 				echo json_encode("SaveFail");
 			else
-				echo json_encode($result);
+				echo json_encode($this->taskp);
 		}
 	}
 	$action = $_POST['action'];

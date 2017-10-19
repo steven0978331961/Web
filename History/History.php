@@ -1,6 +1,6 @@
 <?php
 	date_default_timezone_set("Asia/Taipei");
-	include_once('config.php');
+	include_once('configs.php');
 	
 	class history
 	{
@@ -23,9 +23,46 @@
 			$this->M_files = $f;
 		}
 	}
+	class det
+	{
+		var $M_subject;
+		var $M_department;
+		var $M_users;
+		var $M_content;
+		var $M_date;
+		var $M_starttime;
+		var $M_endtime;
+		var $M_recoder;
+		var $M_files;
+		var $T_name;
+		var $T_department;
+		var $T_deadline;
+		var $T_coll;
+		var $T_status;
+		var $T_finishdate;
+		function __construct($a, $b, $c, $d, $e, $f, $g, $h, $i, $j, $k, $l, $m, $n, $o)
+		{
+			$this->M_subject = $a;
+			$this->M_department = $b;
+			$this->M_users = $c;
+			$this->M_content = $d;
+			$this->M_date = $e;
+			$this->M_starttime = $f;
+			$this->M_endtime = $g;
+			$this->M_recoder = $h;
+			$this->M_files = $i;
+			$this->T_name = $j;
+			$this->T_department = $k;
+			$this->T_deadline = $l;
+			$this->T_coll = $m;
+			$this->T_status = $n;
+			$this->T_finishdate = $o;
+		}
+	}
 	class His extends DB
 	{
 		var $historys = array();
+		var $arr_detail = array();
 		function __construct()
 		{
 			parent ::__construct();
@@ -76,9 +113,9 @@
 			$M_files = array();
 			foreach ($result as $row) 
 			{
-				$M_suers = unserialize($row['M_users']);
+				$M_users = unserialize($row['M_users']);
 				$M_files = unserialize($row['M_files']);
-				array_push($this->historys, new history($row['M_id'], $row['M_subject'], $row['M_department'], $M_suers,
+				array_push($this->historys, new history($row['M_id'], $row['M_subject'], $row['M_department'], $M_users,
                            $row['M_date'], $row['M_recoder'], $M_files));
 			}
 			if(count($result) == 0)
@@ -112,16 +149,22 @@
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_BOTH);
-			$arr = array();			
+			$M_users = array();
+			$M_files = array();
+			$T_coll = array();
+			$M_content = array();		
 			foreach ($result as $row) 
 			{
-				array_push($arr, $row['M_subject'], $row['M_department'], $row['M_users'], $row['M_content'], $row['M_date'], $row['M_starttime'], $row['M_endtime'],
-								 $row['M_recoder'], $row['M_files'], $row['T_name'], $row['T_department'], $row['T_deadline'], $row['T_coll'], $row['T_status'], $row['T_finishdate']);
+				$M_users = unserialize($row['M_users']);
+				$M_files = unserialize($row['M_files']);
+				$T_coll = unserialize($row['T_coll']);
+				$M_content = unserialize($row['M_content']);
+				array_push($this->arr_detail, new det($row['M_subject'], $row['M_department'], $M_users, $M_content, $row['M_date'], $row['M_starttime'],$row['M_endtime'], $row['M_recoder'], $M_files, $row['T_name'], $row['T_department'], $row['T_deadline'],$T_coll, $row['T_status'], $row['T_finishdate']));
 			}
 			if($result == null)
 				echo json_encode("DetailFail");
 			else
-				echo json_encode($result);
+				echo json_encode($this->arr_detail);
 		}
 	}
 	$action = $_POST['action'];

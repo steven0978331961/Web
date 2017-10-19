@@ -1,6 +1,6 @@
 window.onload = function ()
 {
-	var role = "test";
+	var role = "B";
 	var data;
 	var temp;
 	var page_num = 1;
@@ -71,13 +71,20 @@ window.onload = function ()
 					delay = "(逾期)";
 				else
 					delay = "";
+				//人名轉換
+				tmp = data[i].T_coll;
+				tmp = tmp.replace(/0/g,"A");
+				tmp = tmp.replace(/1/g,"B");
+				tmp = tmp.replace(/2/g,"C");
+				tmp = tmp.replace(/3/g,"D");
+				tmp = tmp.replace(/4/g,"E");
 				result = result +
 					'<tr class = "full-msg" id = "row-' + i + '">' +
 						'<td>' + data[i].T_subject + '</td>' +
 						'<td>' + data[i].T_name + '</td>' +
 						'<td>' + data[i].T_department + '</td>' + 
 						'<td>' + data[i].T_deadline + '</td>' + 
-						'<td>' + data[i].T_coll + '</td>' + 
+						'<td>' + tmp + '</td>' + 
 						'<td>' + data[i].T_status + delay + '</td>' +						
 						'<td>' ;
 				if(role == data[i].M_recoder)
@@ -194,7 +201,7 @@ window.onload = function ()
 		for (i = 0; i < j; i++)
 		{
 			btn = btn +
-			'<li><button class = "btn btn-outline-primary btn-sm page_cnt" name = "page" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
+			'<button class = "btn btn-outline-primary btn-sm page_cnt" name = "page" id = "Page-'+(i+1)+'">'+(i+1)+'</button>';
 		}
 		document.getElementById("pagelist").innerHTML = btn;
 		var page = document.getElementsByClassName("page_cnt");
@@ -214,12 +221,16 @@ window.onload = function ()
 		document.getElementById("t_mdSubject").innerHTML = temp.T_subject;
 		document.getElementById("t_mdName").innerHTML = temp.T_name;
 		document.getElementById("t_Mddeadline").value = temp.T_deadline;
-		document.getElementById("t_MdColl").value = temp.T_coll;
+		if(temp.T_coll.indexOf(";") > -1)
+			arr = temp.T_coll.split(';');
+		else
+			arr = temp.T_coll.split(','); 
+		$('#t_MdColl').selectpicker('val', arr);
 		document.getElementById("t_MdDepartment").value = temp.T_department;
 		document.getElementById("t_MdStatus").value = temp.T_stat;
 	})
 	function Save()
-	{		
+	{
 		temp.clear;
 		$('#myModal').modal('hide');
 		var saveData = new FormData();
@@ -227,7 +238,7 @@ window.onload = function ()
 		saveData.append("T_subject", document.getElementById("t_mdSubject").innerHTML);
 		saveData.append("T_name", document.getElementById("t_mdName").innerHTML);
 		saveData.append("T_deadline",document.getElementById("t_Mddeadline").value);
-		saveData.append("T_coll", document.getElementById("t_MdColl").value);
+		saveData.append("T_coll", $('#t_MdColl').val());
 		saveData.append("T_department", document.getElementById("t_MdDepartment").value);
 		saveData.append("T_status", document.getElementById("t_MdStatus").value);
 		var request = new XMLHttpRequest();
@@ -238,9 +249,9 @@ window.onload = function ()
 				var r_data = JSON.parse(request.responseText);
 				if(r_data != "SaveFail")
 				{
-					if(t_de == r_data.T_department && t_st == r_data.T_stat)
+					if(t_de == r_data[0].T_department && t_st == r_data[0].T_stat)
 					{
-						data.splice(t_row, 1, r_data);
+						data.splice(t_row, 1, r_data[0]);
 					}
 					else
 					{

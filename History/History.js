@@ -1,6 +1,6 @@
 window.onload = function ()
 {
-	var role = "test";
+	var role = "B";
 	var data;
 	var temp_id;
 	var page_num = 1;
@@ -28,7 +28,6 @@ window.onload = function ()
 		{
 			if(request.readyState == 4 && request.status == 200)
 			{
-				console.log(request.responseText);
 				data = JSON.parse(request.responseText);
 				if(data == "nothing")
 					PageList(1);
@@ -49,24 +48,49 @@ window.onload = function ()
 		}
 		else
 		{
-			var taaa = JSON.parse(data[0].M_files);
-			console.log(taaa);
 			var j = page_num*datanum;
 			var i = (page_num-1)*datanum;
 			if ((data.length - i) < datanum)
 				j = data.length;
 			var result = "";
+			var M_users;
+			var M_files;
+			var users;
+			var files;
 			for(;i < j; i++)
 			{
+				var users = "";
+				M_users = JSON.parse(data[i].M_users);
+				for(var k = 0; k < M_users.length; k++)
+				{
+					if(k > 0)
+						users = users + ",";
+					users = users + M_users[k];
+				}
+				//人名轉換
+				users = users.replace(/0/g,"A");
+				users = users.replace(/1/g,"B");
+				users = users.replace(/2/g,"C");
+				users = users.replace(/3/g,"D");
+				users = users.replace(/4/g,"E");
+				var files = "";
+				M_files = JSON.parse(data[i].M_files);
+				for(var k = 0; k < M_files.length; k++)
+				{
+					if(k > 0)
+						files = files + ",";
+					files = files + M_files[k];
+				}
 				result = result +
 					'<tr class = "full-msg" id = "' + data[i].M_id + '">' +
 						'<td>' + data[i].M_date + '</td>' +
 						'<td>' + data[i].M_subject + '</td>' +
 						'<td>' + data[i].M_department + '</td>' + 
-						'<td>' + data[i].M_users + '</td>' + 
-						'<td>' + data[i].M_files + '</td>' + 					
+						'<td>' + users + '</td>' + 
+						'<td>' + files + '</td>' + 					
 						'<td>' ;
-				if(data[i].M_users.indexOf(role) > -1)
+				users = "B";
+				if(users.indexOf(role) > -1)
 				{
 					result = result + '<button type="button" class="btn btn-success btn-sm detail" data-toggle="modal" data-target="#myModal" id="detail-' + data[i].M_id + '">詳細資料</button>' ;
 				}
@@ -139,28 +163,58 @@ window.onload = function ()
 			{
 				
 				var temp = JSON.parse(request.responseText);
-				console.log(temp);
 				if(temp != "DetailFail")
 				{
+					var M_users;
+					var users = "";
+					var M_files;
+					var files = "";
+					M_users = JSON.parse(temp[0].M_users);
+					for(var k = 0; k < M_users.length; k++)
+					{
+						if(k > 0)
+							users = users + ",";
+						users = users + M_users[k];
+					}
+					//人名轉換
+					users = users.replace(/0/g,"A");
+					users = users.replace(/1/g,"B");
+					users = users.replace(/2/g,"C");
+					users = users.replace(/3/g,"D");
+					users = users.replace(/4/g,"E");
+					M_files = JSON.parse(temp[0].M_files);
+
+					for(var k = 0; k < M_files.length; k++)
+					{
+						if(k > 0)
+							files = files + ",";
+						files = files + M_files[k];
+					}
 					document.getElementById("d_MdSubject").innerHTML = temp[0].M_subject;
 					document.getElementById("d_MdDate").innerHTML = temp[0].M_date;
 					document.getElementById("d_MdStartTime").innerHTML = temp[0].M_starttime;
 					document.getElementById("d_MdEndTime").innerHTML = temp[0].M_endtime;
-					document.getElementById("d_MdUsers").innerHTML = temp[0].M_users;
+					document.getElementById("d_MdUsers").innerHTML = users;
 					document.getElementById("d_MdRecoders").innerHTML = temp[0].M_recoder;	
 					document.getElementById("d_MdDepart").innerHTML = temp[0].M_department;
 					document.getElementById("d_MdContent").innerHTML = temp[0].M_content;
-					document.getElementById("d_MdFiles").innerHTML = temp[0].M_files;
+					document.getElementById("d_MdFiles").innerHTML = files;
 					if(temp[0].T_name != null)
 					{
 						var result = "";
+						var coll = "";
 						for(var i = 0; i < temp.length; i++)
 						{
+							coll = temp[i].T_coll.replace(/0/g,"A");
+							coll = coll.replace(/1/g,"B");
+							coll = coll.replace(/2/g,"C");
+							coll = coll.replace(/3/g,"D");
+							coll = coll.replace(/4/g,"E");
 							result = result + '<hr></hr>' +			
 											  '<h5>工作進度</h3>' +
 											  '<h5>工作名稱：' + temp[i].T_name + '</h5>' +
 											  '<h5>Deadline Date：' + temp[i].T_deadline + '</h5>' +
-											  '<h5>協作者：' + temp[i].T_coll + '</h5>' +
+											  '<h5>協作者：' + coll + '</h5>' +
 											  '<h5>狀態：' + temp[i].T_status + '</h5>';
 						}
 						document.getElementById("task").innerHTML = result;
