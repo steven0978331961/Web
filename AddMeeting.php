@@ -6,6 +6,25 @@ include_once("PODAction.php");
 if($_POST){
 
 
+
+$Subject_Data= strip_tags($_POST["Subject"])  ;
+
+$Meeting_ID_Data= strip_tags($_POST["Meeting_ID"]);
+
+$MeetingDay_Data= strip_tags($_POST["MeetingDay"]) ;
+
+$StartTime_Data= strip_tags($_POST["StartTime"]);
+
+$FinalTime_Data= strip_tags($_POST["FinalTime"]);
+
+$FileName_Data= strip_tags($_POST["FileName"]);
+
+$Content_Data=strip_tags($_POST['content'],"<img></img>");
+
+
+
+
+
 //echo $_POST["TaskArray"];
 // var_dump( json_decode($_POST["TaskArray"]));
 
@@ -22,31 +41,36 @@ if(isset($_FILES['file']['tmp_name'])!=false){
     } 
 }
 
-
+//$_POST["Department"]
 if(isset($_POST["Subject"])!=false){
   global $File_Name;
   echo $File_Name;
   SQLUse_Create();  
-  SQLUse_insert( $_POST["Subject"]
-  ,$_POST["Participate"]
+  SQLUse_insert(  $_POST["Subject"]
+  ,$_POST["Meeting_ID"]
   ,$_POST['content']
-  ,$_POST["Date"]
+  ,$_POST["MeetingDay"]
   ,$_POST["StartTime"]
   ,$_POST["FinalTime"]
   ,"null"
   ,$_POST["FileName"]
-  ,$_POST["Department"]
+  ,"Null"
   ,"0" 
   ,"1");
   echo  "紀錄完成";
 }
 
 
+
+
+
+
+
 if( isset($_POST["TaskArray"] )!=false ){
   $Sp_TaskArray=json_decode($_POST["TaskArray"]);
   foreach ($Sp_TaskArray as $key => $value) {    
 
-      SQLUse_insertTask($_POST["Subject"],$value[0],$value[1],$value[3] ,"0",NULL,$_POST["Department"]);
+      SQLUse_insertTask($_POST["Subject"],$value[0],$value[1],$value[2] ,"0",NULL,"電商");
   }
 }
 /*foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {

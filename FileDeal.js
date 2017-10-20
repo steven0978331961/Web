@@ -14,7 +14,7 @@ document.getElementById("file").click();
 function Send_FileName(File_Name){
 	
   for(var i=0;i<File_Name.length;i++){
-   window.parent.File_Name.push(File_Name[i].name);
+   File_Name.push(File_Name[i].name);
    	}
 
   

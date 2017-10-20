@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="AddMeeting.js"></script>
+
+
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  </head>
+  <body   onload="Add_Plugin();">
+    <form  action="AddMeeting.php"  Id="AddMeeting"  method="Post"     enctype="multipart/form-data"  >
+    <div  style="width: 600px;margin: 0 auto; margin-top:50px;"  class="container-fluid" >
+        <div class="container; " >
+            <div class="row;" >
+              <h1  >會議記錄</h1> 
+            </div><br/><br/>
+
+
+            <div class="row">
+                <div class="col">
+                    <input type="text"  class="form-control"   maxlength="20" name="Subject"  value="會議主題"  Id="Subject" >
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col">
+                    日期:<input type="date" name="MeetingDay" Id="MeetingDay" value="2017-11-05" >
+                </div>
+                <div class="col">
+                    開始時間:<input type="time" name="StartTime" value="16:05" >
+                </div>
+                <div class="col">
+                    結束時間:<input type="time"  name="FinalTime" value="16:06">
+                </div>
+
+            </div>
+
+            <div class="row" style="margin-left: 0px" >
+                <input type="button" value="修改與會人"     class="btn btn-primary "  data-toggle="modal" data-target="#MeetingPeople" > 
+                <!-- Modal -->
+                <div class="modal fade" id="MeetingPeople" tabindex="-1" role="dialog" aria-labelledby="MeetingPeople" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">與會人名單</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                          
+                          <div>
+                                  與會人(複選):   電商<input type="radio"  name="Department_Choose" value="one"  onchange="Change_CheckBox(this)" checked="checked"  > 
+                                                  資訊<input type="radio"  name="Department_Choose" value="two"  onchange="Change_CheckBox(this)" >  
+                                                  編輯<input type="radio"  name="Department_Choose" value="three"  onchange="Change_CheckBox(this)"  > <br/>  
+                          </div>                    
+                          <div class="modal-body" Id=MeetingPeople_div>
+                                  大衛:<input type="checkbox" name="MeetingPeople"  id="01" value="大衛" ><br/>
+                                  欣偉<input type="checkbox" name="MeetingPeople"  id="02" value="欣偉" ><br/>
+                                  於安<input type="checkbox" name="MeetingPeople" id="03" value="於安"><br/>
+                                  義傑<input type="checkbox"  name="MeetingPeople"  id="04" value="義傑"><br/>
+                                  起停<input type="checkbox" name="MeetingPeople" id="05"  value="起停"><br/>
+                              
+                          </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary"  onclick="Press_AddMeeting();">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div  >
+
+
+
+
+
+
+
+            <div class="row" style="margin-left: 0px">
+                <div Id=Who_Meeting  name="Who_Meeting" value=""  style="width: 540px"  readonly="value" > </div>
+            </div  ><br/><br/><br/>
+
+
+
+
+            <div  class="row"  style="margin-left: 0px">              
+               <textarea name='content' id="content" rows="4" cols="60"  ></textarea><br/>
+            </div><br/>
+
+            <div  class="row" style="margin-left: 0px" >
+                <input type="text" id="id" name="id" value="1"  style="display:none" />          
+                <input type="button"  onclick="open_file_option();"" value="新增附件"   class="btn btn-primary"  >  
+                <input multiple="multiple" type="file" name="file" id="file" style="display:none" onchange="fileSelected();" accept="image/jpeg,image/png"/><br/>
+
+                <table id="show" border="1" style="width: 566px" class="table table-striped" >
+                <tr><td   width="40%">名稱</th><td  width="10%">大小</td><td  width="10%" >狀態</td><td align="center" >伺服器回傳訊息</td><td width="15%"> 刪除 </td></tr>
+                </table>
+            </div><br/><br/><br/><br/>
+
+
+            <div class="row" style="margin-left: 0px">
+
+            </div>
+
+
+            <div  class="row" style="margin-left: 0px" >              
+                <h3>工作進度:</h3>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <input type="text"  class="form-control"   maxlength="20" name="WorkName"  value="工作名稱名稱"  Id="WorkName" >
+                </div>
+            </div>
+                          
+         
+            <div class="row">         
+                <div class="col">
+                    截止日期:<input type="Date" name="DeadLine" Id="DeadLine"  >
+                </div>
+            </div>
+             <div  class="row"  > 
+                <div class="col">             
+                    <input type="button" value="修改協作人"   class="btn btn-primary  "  data-toggle="modal" data-target="#HelpPeople" >  <br/>
+                    <!-- Modal -->
+                    <div class="modal fade" id="HelpPeople" tabindex="-1" role="dialog" aria-labelledby="HelpPeople" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">協作人名單</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                              <div class="modal-body">
+                                  <form>
+                                      協作人(複選):<br/>大衛:<input type="checkbox" name="HelpPeople"  id="01" value="大衛" ><br/>
+                                      欣偉<input type="checkbox" name="HelpPeople"  id="02" value="欣偉" ><br/>
+                                      於安<input type="checkbox" name="HelpPeople" id="03" value="於安"><br/>
+                                      義傑<input type="checkbox"  name="HelpPeople"  id="04" value="義傑"><br/>
+                                      起停<input type="checkbox" name="HelpPeople" id="05"  value="起停"><br/><br/><br/>
+                                  </form>
+                              </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"  onclick="Press_HelpPeople();">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                </div> 
+                <div class="col"> 
+                     <input type="button" value="新增工作項目"   href="#" onclick="DealTask()"  class="btn btn-primary"  >
+                </div>
+            </div><br/>
+
+
+
+
+            <div class="row" style="margin-left: 0px">
+                <div Id=Who_Help  name="Who_Help" value=""  style="width: 540px"  readonly="value" > </div>
+            </div  ><br/>
+
+             <div class="row" style="margin-left: 0px">
+                <table name="Task" id="Task" border="1" width="650" class="table table-striped" style="width: 566px" >
+                      <tr>
+                      <th  width='30%'>
+                        項目
+                      </th>
+                      <th  width='15%'>
+                        日期
+                      </th>
+                      <th>
+                        合作人
+                      </th>
+                      <th  width='15%' >
+                        刪除
+                      </th>
+
+                    </tr>
+
+
+                    </table>
+             </div  ><br/><br/><br/>
+
+
+             <div class="row" style="margin-left: 0px  ;float:right  ">
+                  <input type="button" value="完成紀錄"   class="btn btn-primary"  onclick="Summit();"><br/><br/>
+             </div>
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         </div>
+      
+     </div>
+
+    
+
+      </form>
+  </body>
+</html>

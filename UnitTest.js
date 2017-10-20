@@ -9,7 +9,7 @@ document.write("<script src='ckeditor/ckeditor.js'></script>");
 //document.write("<script src='https://cdn.ckeditor.com/ckeditor5/1.0.0-alpha.1/inline/ckeditor.js'></script>");
 
 function Add_Plugin(){	
-	CKEDITOR.replace( 'content', {width:700, height:300  });
+	CKEDITOR.replace( 'content', {width:566, height:300  });
 }
 
 
