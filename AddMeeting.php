@@ -1,12 +1,19 @@
 <?php
 include_once("PODAction.php");
+session_start();
+$_SESSION['Name']='小明';
 
+//SQL_FindSameName();
 
 
 if($_POST){
 
 
+if(isset($_POST["User_Name_Quest"])){
+  echo $_SESSION['Name'];
+}
 
+/*
 $Subject_Data= strip_tags($_POST["Subject"])  ;
 
 $Meeting_ID_Data= strip_tags($_POST["Meeting_ID"]);
@@ -20,7 +27,7 @@ $FinalTime_Data= strip_tags($_POST["FinalTime"]);
 $FileName_Data= strip_tags($_POST["FileName"]);
 
 $Content_Data=strip_tags($_POST['content'],"<img></img>");
-
+*/
 
 
 
@@ -43,18 +50,46 @@ if(isset($_FILES['file']['tmp_name'])!=false){
 
 //$_POST["Department"]
 if(isset($_POST["Subject"])!=false){
+   $Department=array();
+   $S_Department= json_decode($_POST["Meeting_ID"]);
+  
+
+
+  for($i=0;$i<count($S_Department);$i++){
+    if( (int)$S_Department[$i]>0&&(int)$S_Department[$i]<=5 ){
+      array_push($Department, '電商');
+      
+      break;
+    }
+  }
+  for($i=0;$i<count($S_Department);$i++){
+    if(        (int)$S_Department[$i]>5&&(int)$S_Department[$i]<=10   ){
+      array_push($Department, '資訊');
+      break;
+    }
+  }
+  for($i=0;$i<count($S_Department);$i++){
+     if(           (int)$S_Department[$i]>10&&(int)$S_Department[$i]<=15     ){
+      array_push($Department, '編輯');
+      break;
+    }
+  }
+
+//var_dump($Department) ;
+$JS_Department=json_encode($Department,JSON_UNESCAPED_UNICODE);
+
   global $File_Name;
   echo $File_Name;
   SQLUse_Create();  
   SQLUse_insert(  $_POST["Subject"]
   ,$_POST["Meeting_ID"]
   ,$_POST['content']
-  ,$_POST["MeetingDay"]
+  ,date("Y-m-d")
   ,$_POST["StartTime"]
   ,$_POST["FinalTime"]
-  ,"null"
+  ,$_SESSION['Name']
   ,$_POST["FileName"]
-  ,"Null"
+  ,$JS_Department
   ,"0" 
   ,"1");
   echo  "紀錄完成";
@@ -69,12 +104,13 @@ if(isset($_POST["Subject"])!=false){
 if( isset($_POST["TaskArray"] )!=false ){
   $Sp_TaskArray=json_decode($_POST["TaskArray"]);
   foreach ($Sp_TaskArray as $key => $value) {    
-
       SQLUse_insertTask($_POST["Subject"],$value[0],$value[1],$value[2] ,"0",NULL,"電商");
   }
 }
+
+
 /*foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {
-  //  echo($_FILES['file']['tmp_name'][$Key]);
+  //echo($_FILES['file']['tmp_name'][$Key]);
  // echo($KeyValue);
     move_uploaded_file($_FILES['file']['tmp_name'][$Key],$location . iconv("UTF-8", "big5",$_FILES["file"]["name"][$Key]) )   ;
 }
@@ -242,7 +278,37 @@ try{
 
 
 
+function SQL_FindSameName(){
+   $SeverName="localhost";
+   $DbName="test";
+   $UserName="root";
+   $PassWord="0000";
 
+   $Sql="select * from meetings";
+
+   try{
+       $Connect=new PDO("mysql:host=$SeverName;dbname=$DbName",$UserName);
+       $Connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       $Connect->exec("set names utf8");
+        // 運行 SQL
+       $query    = $Connect->query($Sql);
+       $datalist = $query->fetchAll();
+        //第一次輸出
+        
+        var_dump($datalist['M_subject'] );
+        for( $i=0; $i<count($datalist[0]);$i++    ){
+         //  echo  $datalist[0][$i];
+
+        }
+
+         }
+    catch(PDOException $e){
+        echo $e ->getMessage();
+        }
+
+
+
+}
 
 
 
