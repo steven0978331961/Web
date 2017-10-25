@@ -21,7 +21,7 @@
 		<div class = "container-fluid">
 			<div class = "row" align = "center">
 				<div class = "col-md-12">
-					<H1>工作項目</H1>
+					<H1>任務列表</H1>
 				</div>
 			</div>
 			<div class = "row">
@@ -31,15 +31,9 @@
 					<p>結束日期：<input type = "date" id = "t_MtEndDate"/></span>
 				</div>
 				<div class="col-md-4">
-					<p>工作名稱：<input type = "text" id = "t_TpName"/></p>
+					<p>任務名稱：<input type = "text" id = "t_TpName"/></p>
 					<p>部門：
-						<select id = "t_TpDepartment">
-							<option value = "資訊">資訊</option>
-							<option value = "編輯">編輯</option>
-							<option value = "企劃">企劃</option>
-							<option value = "電商">電商</option>
-							<option value = "跨部門">跨部門</option>
-						</select>
+						<select id = "t_TpDepart" name = "t_TpDepart" class="selectpicker form-control data-hide-disabled: true" multiple></select>
 					</p>
 					<p>狀態：
 						<select id = "t_TpStatus">
@@ -64,7 +58,7 @@
 									會議名稱
 								</th>
 								<th>
-									工作名稱
+									任務名稱
 								</th>
 								<th>
 									部門
@@ -118,25 +112,17 @@
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<div class="modal-body">
-						<p>截止日期：<input type = "date" id = "t_Mddeadline"/></p>
-						<p>協作者：
-							<select id = "t_MdColl" class="selectpicker show-menu-arrow form-control" multiple>
-								<option value="0">A</option>
-								<option value="1">B</option>
-								<option value="2">C</option>
-								<option value="3">D</option>
-								<option value="4">E</option>
-							</select>
-						</p>
-						<p>部門：
+						<p>截止日期：<input type = "date" id = "t_Mddeadline"/><font id = "hint" color = "red" style = "display:none">截止日期不能小於今天</font></p>
+						<p id = "t_Mdcoll_all">協作者：</p>
+						<p>
 							<select id = "t_MdDepartment">
 								<option value = "資訊">資訊</option>
 								<option value = "編輯">編輯</option>
 								<option value = "企劃">企劃</option>
 								<option value = "電商">電商</option>
-								<option value = "跨部門">跨部門</option>
 							</select>
-						</p>
+							<select id = "t_MdColl" class = "selectpicker show-menu-arrow" multiple></select>
+						</p>		
 						<p>狀態：
 							<select id = "t_MdStatus">
 								<option value = "0">進行中</option>

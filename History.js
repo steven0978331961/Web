@@ -1,6 +1,6 @@
 window.onload = function ()
 {
-	var role = "B";
+	var role = getRole();
 	var data;
 	var temp_id;
 	var page_num = 1;
@@ -9,8 +9,18 @@ window.onload = function ()
 	document.getElementById("search").onclick = function() {FormShow("Search");};
 	document.getElementById("Prev-Page").onclick = function () {page_num = (page_num == 1? 1 : page_num - 1); GridView();};
 	document.getElementById("Next-Page").onclick = function () {page_num = (page_num == Math.ceil(data.length/datanum)? page_num : page_num + 1);GridView();};
+	
+	getRight();
 	FormShow("New");
 	
+	function getRight()
+	{
+		var depart = JSON.parse(role["U_department"]);
+		for(var i = 0; i < depart.length; i++)
+			$('#s_MtDepart').append(new Option(depart[i],depart[i]));
+		$('#s_MtDepart').selectpicker('refresh');
+		$('#s_MtDepart').selectpicker('selectAll');
+	}
 	function FormShow(btn)
 	{
 		var viewData = new FormData();
@@ -21,8 +31,8 @@ window.onload = function ()
 			viewData.append("s_MtStartDate", document.getElementById("s_MtStartDate").value);
 		if(document.getElementById("s_MtEndDate").value != "")
 			viewData.append("s_MtEndDate", document.getElementById("s_MtEndDate").value);
-		if(document.getElementById("s_MtDepart").value != "")
-			viewData.append("s_MtDepart", document.getElementById("s_MtDepart").value);
+		if($('#s_MtDepart').length > 0)
+			viewData.append("s_MtDepart", $('#s_MtDepart').val());
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function()
 		{
@@ -60,19 +70,14 @@ window.onload = function ()
 			for(;i < j; i++)
 			{
 				var users = "";
-				M_users = JSON.parse(data[i].M_users);
+				M_users = getName(JSON.parse(data[i].M_users));
 				for(var k = 0; k < M_users.length; k++)
 				{
 					if(k > 0)
 						users = users + ",";
-					users = users + M_users[k];
+					users = users + M_users[k]['U_name'];
 				}
-				//人名轉換
-				users = users.replace(/0/g,"A");
-				users = users.replace(/1/g,"B");
-				users = users.replace(/2/g,"C");
-				users = users.replace(/3/g,"D");
-				users = users.replace(/4/g,"E");
+				
 				var files = "";
 				M_files = JSON.parse(data[i].M_files);
 				for(var k = 0; k < M_files.length; k++)
@@ -89,12 +94,11 @@ window.onload = function ()
 						'<td>' + users + '</td>' + 
 						'<td>' + files + '</td>' + 					
 						'<td>' ;
-				users = "B";
-				if(users.indexOf(role) > -1)
+				if((users.indexOf(role["U_id"]) > -1) || (role["U_role"] == 0))
 				{
 					result = result + '<button type="button" class="btn btn-success btn-sm detail" data-toggle="modal" data-target="#myModal" id="detail-' + data[i].M_id + '">詳細資料</button>' ;
 				}
-				if(role == data[i].M_recoder)
+				if((role["U_id"] == data[i].M_recoder) || (role["U_role"] == 0))
 				{
 					result = result +
 							'<button type="button" class="btn btn-primary btn-sm edit"  id="edit-' + data[i].M_id + '">編輯</button>' +
@@ -115,7 +119,7 @@ window.onload = function ()
 			edi[i].onclick = function() {Edit(this.id)};
 		var pa = document.getElementsByName("page");
 		for(var i = 0; i < pa.length; i++)
-			pa[i].className = "btn btn-outline-primary btn-sm page_cnt";
+			pa[i].className = "btn btn-info btn-sm page_cnt";
 		document.getElementById("Page-"+page_num).className = "btn btn-primary btn-sm page_cnt";
 	}
 	function Delete(id)
@@ -165,57 +169,53 @@ window.onload = function ()
 				var temp = JSON.parse(request.responseText);
 				if(temp != "DetailFail")
 				{
-					var M_users;
 					var users = "";
-					var M_files;
-					var files = "";
-					M_users = JSON.parse(temp[0].M_users);
+					M_users = getName(JSON.parse(temp[0].M_users));
 					for(var k = 0; k < M_users.length; k++)
 					{
 						if(k > 0)
 							users = users + ",";
-						users = users + M_users[k];
+						users = users + M_users[k]['U_name'];
 					}
-					//人名轉換
-					users = users.replace(/0/g,"A");
-					users = users.replace(/1/g,"B");
-					users = users.replace(/2/g,"C");
-					users = users.replace(/3/g,"D");
-					users = users.replace(/4/g,"E");
+					var M_files;
+					var files = "";
 					M_files = JSON.parse(temp[0].M_files);
-
 					for(var k = 0; k < M_files.length; k++)
 					{
 						if(k > 0)
 							files = files + ",";
-						files = files +"<a href='uploads/" +M_files[k]+"'>"+M_files[k]+"</a>";
+						files = files +"<a download href='uploads/" +M_files[k]+"'>"+M_files[k]+"</a>";
 					}
 					document.getElementById("d_MdSubject").innerHTML = temp[0].M_subject;
 					document.getElementById("d_MdDate").innerHTML = temp[0].M_date;
 					document.getElementById("d_MdStartTime").innerHTML = temp[0].M_starttime;
 					document.getElementById("d_MdEndTime").innerHTML = temp[0].M_endtime;
 					document.getElementById("d_MdUsers").innerHTML = users;
-					document.getElementById("d_MdRecoders").innerHTML = temp[0].M_recoder;	
+					document.getElementById("d_MdRecoders").innerHTML = getName(temp[0].M_recoder)[0]['U_name'];	
 					document.getElementById("d_MdDepart").innerHTML = temp[0].M_department;
 					document.getElementById("d_MdContent").innerHTML = temp[0].M_content;
 					document.getElementById("d_MdFiles").innerHTML = files;
 					if(temp[0].T_name != null)
 					{
 						var result = "";
-						var coll = "";
 						for(var i = 0; i < temp.length; i++)
 						{
-							coll = temp[i].T_coll.replace(/0/g,"A");
-							coll = coll.replace(/1/g,"B");
-							coll = coll.replace(/2/g,"C");
-							coll = coll.replace(/3/g,"D");
-							coll = coll.replace(/4/g,"E");
-							result = result + '<hr></hr>' +			
-											  '<h5>工作進度</h3>' +
-											  '<h5>工作名稱：' + temp[i].T_name + '</h5>' +
-											  '<h5>Deadline Date：' + temp[i].T_deadline + '</h5>' +
-											  '<h5>協作者：' + coll + '</h5>' +
-											  '<h5>狀態：' + temp[i].T_status + '</h5>';
+							var coll = "";
+							console.log(temp[0].T_coll);
+							T_coll = getName(temp[0].T_coll.replace(/;+/g,','));
+							for(var k = 0; k < T_coll.length; k++)
+							{
+								if(k > 0)
+									coll = coll + ",";
+								coll = coll + T_coll[k]['U_name'];
+							}
+							result = result + '<tr>' +			
+											  	'<td>' + temp[i].T_name + '</td>' +
+											  	'<td>' + temp[i].T_department + '</td>' +
+											  	'<td>' + temp[i].T_deadline + '</td>' +
+											  	'<td>' + coll + '</td>' +
+											  	'<td>' + temp[i].T_status + '</td>' +
+											  '</tr>';
 						}
 						document.getElementById("task").innerHTML = result;
 					}
@@ -228,7 +228,7 @@ window.onload = function ()
 	})
 	function Edit(id)
 	{
-		document.location.href="AddMeeting.html?id="+id.substring(id.indexOf("-")+1);
+		document.location.href="AddMeeting2.html?id="+id.substring(id.indexOf("-")+1);
 	}
 	function ViewNumChange()
 	{
@@ -252,7 +252,7 @@ window.onload = function ()
 		for (i = 0; i < j; i++)
 		{
 			btn = btn + 
-			'<li><button class = "btn btn-outline-primary btn-sm page_cnt" name = "page" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
+			'<li><button class = "btn btn-info btn-sm page_cnt" name = "page" id = "Page-'+(i+1)+'">'+(i+1)+'</button></li>';
 		}
 		document.getElementById("pagelist").innerHTML = btn;
 		var page = document.getElementsByClassName("page_cnt");
@@ -260,3 +260,4 @@ window.onload = function ()
 			page[i].onclick = function() {PageChange(this.id)};
 	}
 }
+document.write("<script src='Role.js'></script>");

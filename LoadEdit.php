@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 	date_default_timezone_set("Asia/Taipei");
 	include_once('configs.php');
@@ -48,9 +49,10 @@
 		}
 		function getEdit()
 		{	
-			$query = "SELECT * FROM `Meetings` LEFT JOIN `Taskprocess` ON `Meetings`.`M_subject` = `Taskprocess`.`T_subject` WHERE `M_id` = :M_id AND `M_status` = 1";
+			$query = "SELECT * FROM `Meetings` LEFT JOIN `Taskprocess` ON `Meetings`.`M_subject` = `Taskprocess`.`T_subject` WHERE `M_id` = :M_id AND `M_status` = 1";// AND `M_recoder` = :M_recoder";
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['id'], PDO::PARAM_INT);
+			//$sth->bindParam(':M_recoder', $_SESSION['U_id'], PDO::PARAM_INT);
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_BOTH);
 			$M_users = array();
@@ -66,7 +68,7 @@
 				array_push($this->edits, new edit($row['M_id'], $row['M_subject'], $row['M_department'], $M_users, $M_content, $row['M_date'], $row['M_starttime'],$row['M_endtime'], $row['M_recoder'], $M_files, $row['T_name'], $row['T_department'], $row['T_deadline'],$T_coll, $row['T_status'], $row['T_finishdate']));
 			}
 			if(count($result) == 0)
-				echo "nodata";
+				echo json_encode("nodata");
 			else
 				echo json_encode($this->edits);
 		}

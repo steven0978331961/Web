@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php
 	date_default_timezone_set("Asia/Taipei");
 	include_once('configs.php');
@@ -85,7 +86,13 @@
 			}
 			if(isset($_POST['s_MtDepart']) != '')
 			{
-				$query = $query."AND `M_department` = :s_MtDepart ";
+				$tmp = explode(",", $_POST['s_MtDepart']);
+				for($i = 0; $i < count($tmp); $i++)
+				{
+					$query = $query.'AND `M_department` LIKE :s_MtDepart'.$i.' ';
+					$conn = "";
+					$tmp[$i] = '%'.$tmp[$i].'%';
+				}
 			}
 			$query = $query."ORDER BY `M_createtime` DESC ";
 			if($_POST['action'] == "new")
@@ -101,11 +108,15 @@
 			}
 			if(isset($_POST['s_MtEndDate']) != '')
 			{
-				$sth->bindParam(':s_MtEndDate', $_POST['s_MtEndDate'], PDO::PARAM_STR);
+				$sth->bindParam(':s_MtEndDate', $_POST['s_MtEndDate']);
 			}
 			if(isset($_POST['s_MtDepart']) != '')
 			{
-				$sth->bindParam(':s_MtDepart', $_POST['s_MtDepart'], PDO::PARAM_STR);
+				for($i = 0; $i < count($tmp); $i++)
+				{
+					$p_depart = ':s_MtDepart'.$i;
+					$sth->bindParam($p_depart, $tmp[$i], PDO::PARAM_STR);
+				}
 			}
 			$sth->execute();
 			$result = $sth->fetchAll(PDO::FETCH_BOTH);
@@ -115,7 +126,7 @@
 			{
 				$M_users = unserialize($row['M_users']);
 				$M_files = unserialize($row['M_files']);
-				array_push($this->historys, new history($row['M_id'], $row['M_subject'], $row['M_department'], $M_users,
+				array_push($this->historys, new history($row['M_id'], $row['M_subject'], json_decode($row['M_department'], JSON_UNESCAPED_UNICODE), $M_users,
                            $row['M_date'], $row['M_recoder'], $M_files));
 			}
 			if(count($result) == 0)
@@ -125,9 +136,10 @@
 		}
 		function Del()
 		{
-			$query = "UPDATE `Meetings` SET `M_status` = 0 WHERE `M_id` = :M_id";
+			$query = "UPDATE `Meetings` SET `M_status` = 0 WHERE `M_id` = :M_id AND `M_recoder` = :M_recoder";
 			$sth = $this->database->prepare($query);
 			$sth->bindParam(':M_id', $_POST['M_id'], PDO::PARAM_INT);
+			$sth->bindParam(':M_recoder', $_SESSION['U_id'], PDO::PARAM_INT);
 			$sth->execute();
 			
 			$query = "SELECT COUNT(`M_id`) AS CNT FROM `Meetings` WHERE `M_id` = :M_id AND `M_status` = 0";
@@ -159,7 +171,7 @@
 				$M_files = unserialize($row['M_files']);
 				$T_coll = unserialize($row['T_coll']);
 				$M_content = unserialize($row['M_content']);
-				array_push($this->arr_detail, new det($row['M_subject'], $row['M_department'], $M_users, $M_content, $row['M_date'], $row['M_starttime'],$row['M_endtime'], $row['M_recoder'], $M_files, $row['T_name'], $row['T_department'], $row['T_deadline'],$T_coll, $row['T_status'], $row['T_finishdate']));
+				array_push($this->arr_detail, new det($row['M_subject'], json_decode($row['M_department'], JSON_UNESCAPED_UNICODE), $M_users, $M_content, $row['M_date'], $row['M_starttime'],$row['M_endtime'], $row['M_recoder'], $M_files, $row['T_name'], json_decode($row['T_department'], JSON_UNESCAPED_UNICODE), $row['T_deadline'],$T_coll, $row['T_status'], $row['T_finishdate']));
 			}
 			if($result == null)
 				echo json_encode("DetailFail");

@@ -35,26 +35,35 @@ function getContent(id)
 				}
 				//寫入資料
 				document.getElementById("Subject").value = data[0].M_subject;
-				document.getElementsByName("Date")[0].value = data[0].M_date;
 				document.getElementsByName("StartTime")[0].value = data[0].M_starttime;
 				document.getElementsByName("FinalTime")[0].value = data[0].M_endtime;
-				document.getElementById("Who_Di").innerHTML = users;
+				//document.getElementById("Who_Di").innerHTML = users;
 				document.getElementById("content").value = data[0].M_content;
-				document.getElementsByName("Department")[0].value = data.M_department;
-				//document.getElementById("file").innerHTML = data.M_files;
+				//document.getElementsByName("Department")[0].value = data.M_department;
+				//document.getElementById("file").innerHTML = data[0].M_files;
+				console.log(data[0].M_files);
+				/*
+				document.getElementById('show').innerHTML 
+	    += "<tr id="+ File_ID+ " >"
+	    + "<td width='40%'  align=\"center\">" + files[i].name + "</td>"
+	    + "<td width='10%' align=\"center\">" + fileSize + "</td>"
+	    + "<td width='10%' align=\"center\" id=\"" + progressNumber + "\">waiting...</td>"
+	    + "<td align=\"center\" id=\"" + serverReturnMessage + "\"></td>"
+	    + "<td width='15%' align=\"center\" ><button type='button' id=" +File_ID+ " onclick='DeleteFile(this);'   class='btn btn-primary'>刪除</button></td>"
+	    + "</tr>";
+				*/
 				for(var i = 0; i< data.length; i++)
 				{
 					document.getElementById("WorkName").value = data[i].T_name;
-					document.getElementsByName("DateLine")[0].value = data[i].T_deadline;
-					document.getElementById("State").value = data[i].T_status;
-					document.getElementById("Who_Di2").innerHTML = data[i].T_coll;
-					document.getElementById("dealtask").click();
+					document.getElementById("DeadLine").value = data[i].T_deadline;
+					document.getElementById("Who_Help").innerHTML = data[i].T_coll;
+					//document.getElementById("taskadd").click();
 				}
 			}
 			else
 			{
 				alert("無資料可修改！");
-				document.location.href="AddMeeting.html";
+				document.location.href="AddMeeting2.html";
 			}
 		}
 	};

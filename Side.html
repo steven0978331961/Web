@@ -26,7 +26,7 @@
 					<button type="button"   class="btn btn-dark"  onclick="GoAddMeetin();">新增會議</button>
 					<button type="button"   class="btn btn-dark" onclick="GoHistory();">歷史紀錄</button>
 					<button type="button"   class="btn btn-dark" onclick="GoTaskprocess();">工作進度</button>
-					<button type="button"   class="btn btn-dark">登出</button>
+					<button type="button"   class="btn btn-dark" onclick="GoLogout();">登出</button>
 	            </div>
 	            <div   class="col" >
 	            	<span  Id="User_Name" style="color: white;float: right;margin-top: 8px;margin-right: 30px"> 1111</span>
@@ -63,7 +63,10 @@
 		parent.document.getElementById("Right").src="Taskprocess.html";
 	}
 
-
+	function GoLogout()
+	{
+		parent.document.getElementById("Right").src="Login.html";
+	}
 	function GetName(){
     var User_Name = document.getElementById("User_Name");
 	xhr = new XMLHttpRequest();
