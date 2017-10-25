@@ -404,7 +404,37 @@ if (checkFilePass()) { // 檢查每一個檔案格式、大小...確認沒問題
 }
 }
 
-// 檢查檔案格式、大小
+//確認檔案是否存在函數
+function Check_File_Exist( FileName){
+    var File_bool;
+	xhr = new XMLHttpRequest();
+		xhr.onreadystatechange=function()
+		  {
+		  if (xhr.readyState==4 && xhr.status==200)
+		    {
+		       console.log(xhr.responseText);
+		       	File_bool=xhr.responseText;
+		    }
+		  }
+
+	xhr.open("POST","AddMeeting.php",false);
+	xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xhr.send("AskFileName_Exist="+FileName);
+
+	if(File_bool=="true"){
+       		console.log("ECHO YOES");
+            return true;
+	   }
+	else{
+	        return false;
+    }
+
+
+
+
+}
+
+// 檢查檔案格式、大小、是否存在
 function checkFilePass() {
     var files = document.getElementById('file').files;
     
@@ -419,6 +449,19 @@ function checkFilePass() {
             alert(" 不支持格式：" + files[i].name);
         return false;
         }
+
+        console.log(Check_File_Exist(files[i].name)   );
+
+
+        if(Check_File_Exist(files[i].name) ==true  ){
+        	alert("伺服器檔案名稱重複"+ files[i].name);
+        	return false;
+
+        }
+
+
+
+
     } 
     return true;
 }
@@ -475,7 +518,7 @@ function uploadComplete(evt) {
         upload(); // 遞迴呼叫 upload()，會等待上一個檔案下載好之後，才會下載另一個檔案
     } 
     if(i==files.length){
-        console.log(i);
+        //console.log(i);
         i=0;
     	Send_FileName(files);
 
@@ -494,10 +537,10 @@ function uploadCanceled(evt) {
 // 上傳檔案 (一個時間點只會有一個檔案被上傳)
 function upload() {
     var files = document.getElementById('file').files[i];
-    console.log(files);
+    //console.log(files);
     var progressNumber = 'progressNumber' + Save_ID;
     
-    console.log(progressNumber);
+    //console.log(progressNumber);
 
 	var fd = new FormData();
 	fd.append('file', files);

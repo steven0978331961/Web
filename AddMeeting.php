@@ -1,42 +1,20 @@
 <?php
 include_once("PODAction.php");
 session_start();
-$_SESSION['Name']='小明';
+$_SESSION['U_name']='小明';
 
 //SQL_FindSameName();
-
-
-if($_POST){
-
-
-if(isset($_POST["User_Name_Quest"])){
-  echo $_SESSION['Name'];
-}
-
-/*
-$Subject_Data= strip_tags($_POST["Subject"])  ;
-
-$Meeting_ID_Data= strip_tags($_POST["Meeting_ID"]);
-
-$MeetingDay_Data= strip_tags($_POST["MeetingDay"]) ;
-
-$StartTime_Data= strip_tags($_POST["StartTime"]);
-
-$FinalTime_Data= strip_tags($_POST["FinalTime"]);
-
-$FileName_Data= strip_tags($_POST["FileName"]);
-
-$Content_Data=strip_tags($_POST['content'],"<img></img>");
-*/
-
-
-
-
-//echo $_POST["TaskArray"];
-// var_dump( json_decode($_POST["TaskArray"]));
-
 $location = 'C:/xampp/htdocs/uploads/';
 
+if(isset($_POST["User_Name_Quest"])){
+  echo $_SESSION['U_name'];
+}
+
+if(isset($_POST["AskFileName_Exist"])      ){
+  if(is_file($location.$_POST["AskFileName_Exist"]       ) ){
+    echo "true";
+  }
+}  
 
 if(isset($_FILES['file']['tmp_name'])!=false){
   if(move_uploaded_file($_FILES['file']['tmp_name'],$location . iconv("UTF-8", "big5",$_FILES["file"]["name"]) ) ){
@@ -47,6 +25,17 @@ if(isset($_FILES['file']['tmp_name'])!=false){
     
     } 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 //$_POST["Department"]
 if(isset($_POST["Subject"])!=false){
@@ -81,13 +70,15 @@ $JS_Department=json_encode($Department,JSON_UNESCAPED_UNICODE);
   global $File_Name;
   echo $File_Name;
   SQLUse_Create();  
+
+
   SQLUse_insert(  $_POST["Subject"]
   ,$_POST["Meeting_ID"]
   ,$_POST['content']
   ,date("Y-m-d")
   ,$_POST["StartTime"]
   ,$_POST["FinalTime"]
-  ,$_SESSION['Name']
+  ,$_SESSION['U_name']
   ,$_POST["FileName"]
   ,$JS_Department
   ,"0" 
@@ -97,7 +88,10 @@ $JS_Department=json_encode($Department,JSON_UNESCAPED_UNICODE);
 
 
 
-
+//檢查程式碼區
+function Check_Evil(){
+  return true;
+}
 
 
 
@@ -109,50 +103,10 @@ if( isset($_POST["TaskArray"] )!=false ){
 }
 
 
-/*foreach ($_FILES["file"]["name"] as $Key  =>$KeyValue) {
-  //echo($_FILES['file']['tmp_name'][$Key]);
- // echo($KeyValue);
-    move_uploaded_file($_FILES['file']['tmp_name'][$Key],$location . iconv("UTF-8", "big5",$_FILES["file"]["name"][$Key]) )   ;
-}
-*/
-
-
-
-/*
-echo $_POST["Date"];echo "<br/>";
-echo $_POST["StartTime"];echo "<br/>";
-echo $_POST["FinalTime"];echo "<br/>";
-echo $_POST["Participate"];echo "<br/>";
-
-echo $_POST["Department"];echo "<br/>";
-//echo $_POST["file"][0]["error"];echo "<br/>";
-echo $_POST["WorkName"];echo "<br/>";
-echo $_POST["DateLine"];echo "<br/>";
-echo $_POST["WorkPeople"];echo "<br/>";
-echo $_POST["State"];echo "<br/>";
-
-*/
-
-//echo "檔案名稱: " . $_FILES["file"]["name"]."<br/>";
-//echo "檔案名稱: " . $_FILES["file"]["tmp_name"]."<br/>";
 
 
 
 
-
-
-
-
-/*
-if ($_FILES["file"]["name"] > 0){
-
-move_uploaded_file($tmp_name,$location . $name ) ;
-
-}*/
-
-
-
-}
 
 
 
