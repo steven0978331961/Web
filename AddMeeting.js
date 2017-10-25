@@ -327,7 +327,7 @@ function  DealTask(){
 		var WorkName=document.getElementById("WorkName").value;
 		var DeadLine=document.getElementById("DeadLine").value;
 		var Who_Help= document.getElementById("Who_Help").innerHTML;
-		TaskArray.push([WorkName,DeadLine,Who_Help]);
+		TaskArray.push([WorkName,DeadLine,Who_Help,Helper_ID]);
 	    document.getElementById("Task").innerHTML="<tr><td  width='30%'>項目</td><td width='15%' >日期</td><td>合作人</td><td  width='15%'>刪除</td></tr>";
 	    TaskArray.forEach(TaskPrint );   	
 

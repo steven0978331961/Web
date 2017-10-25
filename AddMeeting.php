@@ -1,7 +1,7 @@
 <?php
 include_once("PODAction.php");
 session_start();
-$_SESSION['U_name']='小明';
+
 
 //SQL_FindSameName();
 $location = 'C:/xampp/htdocs/uploads/';
@@ -78,7 +78,7 @@ $JS_Department=json_encode($Department,JSON_UNESCAPED_UNICODE);
   ,date("Y-m-d")
   ,$_POST["StartTime"]
   ,$_POST["FinalTime"]
-  ,$_SESSION['U_name']
+  ,$_SESSION['U_id']
   ,$_POST["FileName"]
   ,$JS_Department
   ,"0" 
@@ -97,9 +97,37 @@ function Check_Evil(){
 
 if( isset($_POST["TaskArray"] )!=false ){
   $Sp_TaskArray=json_decode($_POST["TaskArray"]);
-  foreach ($Sp_TaskArray as $key => $value) {    
-      SQLUse_insertTask($_POST["Subject"],$value[0],$value[1],$value[2] ,"0",NULL,"電商");
+  
+  foreach ($Sp_TaskArray as $key => $value) {  
+  $TDepartment=array();
+  
+
+
+  for($i=0;$i<count($value[3]);$i++){
+    if( (int)$value[3][$i]>0&&(int)$value[3][$i]<=5 ){
+      array_push($TDepartment,'電商');
+      var_dump($TDepartment);
+      break;
+    }
   }
+  for($i=0;$i<count($value[3]);$i++){
+    if(        (int)$value[3][$i]>5&&(int)$value[3][$i]<=10   ){
+      array_push($TDepartment, '資訊');
+      break;
+    }
+  }
+  for($i=0;$i<count($value[3]);$i++){
+     if(           (int)$value[3][$i]>10&&(int)$value[3][$i]<=15     ){
+      array_push($TDepartment, '編輯');
+      break;
+    }
+  }
+
+      SQLUse_insertTask($_POST["Subject"],$value[0],$value[1],$value[3] ,"0",NULL,$TDepartment);
+      unset($TDepartment); 
+  }
+
+
 }
 
 
@@ -222,7 +250,8 @@ try{
         $Insert->bindParam(":T_coll",$ST_coll);
         $Insert->bindParam(":T_status",$T_status);
         $Insert->bindParam(":T_finishdate",$T_finishdate);
-        $Insert->bindParam(":T_department",$T_department);
+        $JST_department= json_encode($T_department,JSON_UNESCAPED_UNICODE);
+        $Insert->bindParam(":T_department",$JST_department );
         $Insert->execute();
  }
  catch(PDOException $e){
